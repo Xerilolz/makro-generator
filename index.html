@@ -135,7 +135,7 @@ footer { color: var(--muted); font-size: 12px; }
 
   <section class="card" aria-labelledby="any">
     <h2 id="any">Jede Fähigkeit als Makro</h2>
-    <p class="hint">Alle wirkbaren Fähigkeiten der oben gewählten Klasse, sortiert nach Stufe, auch die aus Talenten. Das Makro passt sich der Art der Fähigkeit an. Die Extras von oben gelten mit.</p>
+    <p class="hint">Alle wirkbaren Fähigkeiten der oben gewählten Klasse, sortiert nach Stufe, auch die aus Talenten. Beim Jäger und Hexenmeister auch die Fähigkeiten von Tier und Dämon. Das Makro passt sich der Art der Fähigkeit an. Die Extras von oben gelten mit.</p>
     <label for="anySpell">Fähigkeit
       <select id="anySpell"></select>
     </label>
@@ -292,7 +292,7 @@ footer { color: var(--muted); font-size: 12px; }
     </ul>
   </section>
 
-  <footer>Stand: Beta-Client 1.60.1, Trainer-Fähigkeiten aus der Wowhead-Datenbank, Talentfähigkeiten, Gifte und Korrekturen aus talentsforever.com (Beta-Client 1.60.1.70630), Stand 29.10.2026. Tier- und Dämonenfähigkeiten sind nicht enthalten. Die Makros sind im Live-Client noch nicht getestet. Ist ein Zauber noch nicht gelernt, passiert beim Drücken nichts. Weicht ein deutscher Name ab, per Shift-Klick aus dem Zauberbuch übernehmen.</footer>
+  <footer>Stand: Beta-Client 1.60.1, Trainer-Fähigkeiten aus der Wowhead-Datenbank, Talentfähigkeiten, Gifte und Korrekturen aus talentsforever.com (Beta-Client 1.60.1.70630), Stand 29.10.2026. Tier- und Dämonenfähigkeiten stehen beim Jäger und Hexenmeister mit dabei. Die Makros sind im Live-Client noch nicht getestet. Ist ein Zauber noch nicht gelernt, passiert beim Drücken nichts. Weicht ein deutscher Name ab, per Shift-Klick aus dem Zauberbuch übernehmen.</footer>
 </main>
 
 <script>
@@ -300,7 +300,8 @@ footer { color: var(--muted); font-size: 12px; }
 // talent abilities and corrections from talentsforever.com (beta client 1.60.1.70630).
 // Line format: level|English|German|type|flags (N = new in Forever, T = learned from a talent)
 // Types: H friendly target, D enemy target (ranged), M enemy target (melee), R revive dead friend,
-// B friend or enemy, F shapeshift form, O no target / self / ground
+// B friend or enemy, F shapeshift form, O no target / self / ground,
+// P pet ability on an enemy, Q pet ability without target, G pet ability on a friend or any target
 const SPELL_DATA = {
 Druid: `1|Mark of the Wild|Mal der Wildnis|H
 4|Moonfire|Mondfeuer|D
@@ -568,12 +569,20 @@ Warrior: `1|Battle Shout|Schlachtruf|O
 50|Recklessness|Tollkühnheit|O`,
 Hunter: `1|Track Beasts|Wildtiere aufspüren|O
 1|Auto Shot|Automatischer Schuss|D
+1|Bite|Beißen|P
+1|Charge|Sturmangriff|P
+1|Claw|Klaue|P
+1|Growl|Knurren|P
+1|Lightning Breath|Blitzschlagatem|P
 4|Serpent Sting|Schlangenbiss|D
 4|Aspect of the Monkey|Aspekt des Affen|O
+5|Cower|Ducken|Q
 6|Arcane Shot|Arkaner Schuss|D
 6|Hunter's Mark|Mal des Jägers|D
 8|Raptor Strike|Raptorstoß|M
 8|Concussive Shot|Erschütternder Schuss|D
+8|Demoralizing Screech|Demoralisierendes Kreischen|P
+8|Scorpid Poison|Skorpidgift|P
 10|Tame Beast|Wildtier zähmen|D
 10|Aspect of the Hawk|Aspekt des Falken|O
 10|Track Humanoids|Humanoide aufspüren|O
@@ -581,9 +590,19 @@ Hunter: `1|Track Beasts|Wildtiere aufspüren|O
 10|Dismiss Pet|Tier freigeben|O
 10|Feed Pet|Tier füttern|O
 10|Revive Pet|Tier wiederbeleben|O
+10|Furious Howl|Wutgeheul|Q
+10|Mine!|Meins!|P
 12|Wing Clip|Zurechtstutzen|M
 12|Distracting Shot|Ablenkender Schuss|D
 12|Mend Pet|Tier heilen|O
+12|Dismember|Zerstückeln|P
+12|Dust Cloud|Staubwolke|P
+12|Pinch|Zwicken|P
+12|Savage Rend|Wildes Verwunden|P
+12|Sonic Blast|Überschall|P
+12|Swipe|Prankenhieb|Q
+12|Tendon Rip|Sehnenriss|P
+12|Web|Gespinst|P
 14|Eagle Eye|Adlerauge|O
 14|Eyes of the Beast|Augen des Wildtiers|O
 14|Scare Beast|Wildtier ängstigen|D
@@ -596,6 +615,8 @@ Hunter: `1|Track Beasts|Wildtiere aufspüren|O
 20|Disengage|Rückzug|M
 20|Freezing Trap|Eiskältefalle|O
 20|Deterrence|Abschreckung|O|T
+20|Shell Shield|Panzerschild|Q
+20|Trickster's Dance|Tanz des Täuschers|Q
 22|Scorpid Sting|Skorpidstich|D
 24|Beast Lore|Wildtierkunde|D
 24|Track Hidden|Verborgenes aufspüren|O
@@ -611,8 +632,13 @@ Hunter: `1|Track Beasts|Wildtiere aufspüren|O
 30|Intimidation|Einschüchterung|O|T
 30|Scatter Shot|Streuschuss|D|T
 30|Strider Kick|Streichertritt|M|T
+30|Dash|Spurt|Q
+30|Dive|Sturzflug|Q
+30|Prowl|Schleichen|Q
+30|Thunderstomp|Donnerstampfer|Q
 32|Flare|Leuchtfeuer|O
 32|Track Demons|Dämonen aufspüren|O
+32|Enchanted Flare|Zauberflamme|O
 34|Explosive Trap|Sprengfalle|O
 36|Viper Sting|Vipernbiss|D
 40|Volley|Salve|O
@@ -719,8 +745,11 @@ Mage: `1|Arcane Intellect|Arkane Intelligenz|H
 58|Conjure Mana Ruby|Manarubin herbeizaubern|O`,
 Warlock: `1|Summon Imp|Wichtel beschwören|O
 1|Immolate|Feuerbrand|D
+1|Firebolt|Feuerblitz|P
+1|Phase Shift|Phasenverschiebung|Q
 4|Corruption|Verderbnis|D
 4|Curse of Weakness|Fluch der Schwäche|D
+4|Blood Pact|Blutpakt|Q
 6|Life Tap|Aderlass|O
 6|Shadow Bolt|Schattenblitz|D
 8|Bane of Agony|Omen der Pein|D
@@ -729,12 +758,16 @@ Warlock: `1|Summon Imp|Wichtel beschwören|O
 10|Demon Skin|Dämonenhaut|O
 10|Drain Soul|Seelendieb|D
 10|Create Healthstone|Gesundheitsstein herstellen|O
+10|Torment|Qual|P
 12|Health Funnel|Lebenslinie|O
 14|Drain Life|Blutsauger|D
 14|Curse of Recklessness|Fluch der Tollkühnheit|D
+14|Fire Shield|Feuerschild|G
 16|Unending Breath|Unendlicher Atem|H
+16|Sacrifice|Opferung|Q
 18|Searing Pain|Sengender Schmerz|D
 18|Create Soulstone|Seelenstein herstellen|O
+18|Consume Shadows|Schatten verzehren|Q
 20|Ritual of Summoning|Ritual der Beschwörung|O
 20|Summon Succubus|Sukkubus beschwören|O
 20|Summon Incubus|Inkubus beschwören|O
@@ -744,9 +777,14 @@ Warlock: `1|Summon Imp|Wichtel beschwören|O
 20|Shadowburn|Schattenbrand|D|T
 20|Amplify Curse|Fluch verstärken|O|T
 20|Demonic Sacrifice|Dämonische Opferung|O|T
+20|Lash of Pain|Schmerzenspeitsche|P
+20|Seduction|Verführung|P
+20|Lesser Invisibility|Geringe Unsichtbarkeit|Q
 22|Eye of Kilrogg|Auge von Kilrogg|O
+22|Soothing Kiss|Besänftigender Kuss|P
 24|Drain Mana|Mana entziehen|D
 24|Sense Demons|Dämonen spüren|O
+24|Suffering|Leiden|Q
 25|Conflagrate|Feuersbrunst|D|NT
 25|Curse of Exhaustion|Fluch der Erschöpfung|D|T
 25|Fel Domination|Teufelsbeherrschung|O|T
@@ -760,8 +798,12 @@ Warlock: `1|Summon Imp|Wichtel beschwören|O
 30|Siphon Life|Lebensentzug|D|T
 30|Bane of Havoc|Omen der Verwüstung|D|T
 30|Soul Link|Seelenverbindung|O|T
+30|Devour Magic|Magie verschlingen|G
+30|Paranoia|Paranoia|Q
 32|Shadow Ward|Schattenzauberschutz|O
+32|Tainted Blood|Besudeltes Blut|Q
 36|Create Spellstone|Zauberstein herstellen|O
+36|Spell Lock|Zaubersperre|P
 40|Howl of Terror|Schreckensgeheul|O
 40|Incinerate|Verbrennen|D|NT
 40|Wrack|Zermürben|D|T
@@ -829,7 +871,7 @@ const LIBRARY = [
   ["Zauber abbrechen", "Alle", "Bricht den laufenden Zauber ab, z. B. für einen Unterbrecher.", "/stopcasting"]
 ];
 
-const TYPE_LABEL = { H: "Heilen und Helfen", B: "Freund oder Feind", D: "Schaden auf Distanz", M: "Nahkampf", R: "Wiederbeleben", F: "Gestalten", O: "Ohne Ziel, auf dich oder auf den Boden" };
+const TYPE_LABEL = { H: "Heilen und Helfen", B: "Freund oder Feind", D: "Schaden auf Distanz", M: "Nahkampf", R: "Wiederbeleben", F: "Gestalten", O: "Ohne Ziel, auf dich oder auf den Boden", P: "Tier oder Dämon: gegen Feinde", Q: "Tier oder Dämon: ohne Ziel", G: "Tier oder Dämon: auf Freund oder Ziel" };
 const TYPE_HINT = {
   H: "Freund unter der Maus, sonst dein freundliches Ziel, sonst du.",
   B: "Unter der Maus: Freund wird geholfen, Feind bekommt den Zauber ab. Sonst dein Ziel.",
@@ -837,7 +879,10 @@ const TYPE_HINT = {
   M: "Nahkampf-Fähigkeit auf dein Ziel. Mit „Automatischen Angriff starten“ beginnt auch die Auto-Attacke.",
   R: "Toter Spieler unter der Maus, sonst dein totes Ziel.",
   F: "Wechselt in die Gestalt. Das Ausrufezeichen verhindert, dass ein zweiter Druck sie wieder verlässt.",
-  O: "Braucht kein Ziel oder wirkt auf dich. Flächenzauber setzt du nach dem Drücken mit der Maus ab."
+  O: "Braucht kein Ziel oder wirkt auf dich. Flächenzauber setzt du nach dem Drücken mit der Maus ab.",
+  P: "Dein Tier oder Dämon wirkt die Fähigkeit auf den Feind unter der Maus, sonst auf dein Ziel. Es muss die Fähigkeit beherrschen und beschworen sein.",
+  Q: "Dein Tier oder Dämon wirkt die Fähigkeit ohne Ziel. Es muss die Fähigkeit beherrschen und beschworen sein.",
+  G: "Dein Dämon wirkt die Fähigkeit auf die Einheit unter der Maus, sonst auf dein Ziel. Er muss beschworen sein."
 };
 
 const $ = (id) => document.getElementById(id);
@@ -874,7 +919,7 @@ function fillSelect(sel, items, empty, grouped) {
   sel.disabled = false;
   const add = (parent, s) => { const o = document.createElement("option"); o.value = s.en; o.textContent = optLabel(s); parent.appendChild(o); };
   if (grouped) {
-    for (const t of ["H", "B", "D", "M", "R", "F", "O"]) {
+    for (const t of ["H", "B", "D", "M", "R", "F", "O", "P", "Q", "G"]) {
       const list = items.filter((s) => s.type === t);
       if (!list.length) continue;
       const g = document.createElement("optgroup"); g.label = TYPE_LABEL[t];
@@ -962,6 +1007,10 @@ function buildAny() {
     lines.push("/cast " + n);
   } else if (s.type === "R") {
     lines.push(joinCast([["[@mouseover,help,dead]", n], ["[help,dead]", n]]));
+  } else if (s.type === "P") {
+    lines.push(joinCast([["[@mouseover,harm,nodead]", n], ["[]", n]]));
+  } else if (s.type === "G") {
+    lines.push(joinCast([["[@mouseover,nodead]", n], ["[]", n]]));
   } else if (s.type === "F") {
     lines.push("/cast !" + n);
   } else {
