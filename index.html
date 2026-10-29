@@ -2,15 +2,17 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Makro-Generator WoW Forever</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600&display=swap">
 <style>
-/* Layout: one column, output card below the controls. Palette: dark ink with a cyan and violet accent. */
+/* Layout: one column; generator, then library, then rules. Palette: cool ink, one cyan accent. */
 :root {
   --bg: #f4f6fa; --card: #ffffff; --fg: #12151c; --muted: #5b6474;
   --line: #d9dee8; --accent: #0a7fa6; --accent-ink: #ffffff; --warn: #b3261e; --ok: #1d7a46;
   --display: "Rajdhani", "Arial Narrow", sans-serif; --body: "Inter", system-ui, sans-serif;
+  --mono: ui-monospace, Consolas, "Courier New", monospace;
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
@@ -33,31 +35,46 @@ body {
   padding-right: max(16px, env(safe-area-inset-right, 0px));
   padding-block: 20px 32px;
 }
-main { max-width: 640px; margin: 0 auto; display: grid; gap: 16px; }
+main { max-width: 680px; margin: 0 auto; display: grid; gap: 16px; }
 header h1 { font: 700 30px/1.1 var(--display); letter-spacing: .02em; margin: 0 0 4px; text-wrap: balance; }
 header p { margin: 0; color: var(--muted); }
 .card { background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 16px; display: grid; gap: 12px; min-width: 0; }
 .card h2 { font: 700 18px/1.2 var(--display); margin: 0; letter-spacing: .04em; text-transform: uppercase; }
+.card h3 { font: 600 14px/1.3 var(--body); margin: 4px 0 0; }
+.card p { margin: 0; }
+.hint { color: var(--muted); }
 label { display: grid; gap: 4px; font-weight: 500; min-width: 0; }
-select, input[type="checkbox"] { font: inherit; }
-select { padding: 9px 10px; border: 1px solid var(--line); border-radius: 4px; background: var(--bg); color: var(--fg); width: 100%; min-width: 0; }
-.check { display: flex; align-items: center; gap: 8px; font-weight: 500; }
-.modes { display: grid; gap: 8px; }
-.modes label { display: flex; align-items: flex-start; gap: 8px; font-weight: 400; color: var(--fg); }
-.out { font: 13px/1.5 ui-monospace, Consolas, monospace; width: 100%; min-height: 96px; padding: 10px; border: 1px solid var(--line); border-radius: 4px; background: var(--bg); color: var(--fg); resize: vertical; }
+select { font: inherit; padding: 9px 10px; border: 1px solid var(--line); border-radius: 4px; background: var(--bg); color: var(--fg); width: 100%; min-width: 0; }
+.row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 8px; min-width: 0; }
+legend { font-weight: 500; margin-bottom: 6px; padding: 0; }
+.opt { display: flex; align-items: flex-start; gap: 8px; font-weight: 400; }
+.opt input { margin-top: 3px; flex: none; }
+.opt small { display: block; color: var(--muted); }
+.out { font: 13px/1.5 var(--mono); width: 100%; min-height: 96px; padding: 10px; border: 1px solid var(--line); border-radius: 4px; background: var(--bg); color: var(--fg); resize: vertical; }
 .meta { display: flex; justify-content: space-between; gap: 8px; color: var(--muted); font-variant-numeric: tabular-nums; flex-wrap: wrap; }
-.meta .over { color: var(--warn); font-weight: 600; }
-.meta .fine { color: var(--ok); font-weight: 600; }
+.over { color: var(--warn); font-weight: 600; }
+.fine { color: var(--ok); font-weight: 600; }
 button {
   font: 600 14px var(--body); padding: 10px 14px; border: 0; border-radius: 4px;
   background: var(--accent); color: var(--accent-ink); cursor: pointer; justify-self: start;
 }
-button:focus-visible, select:focus-visible, .out:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button:disabled { opacity: .5; cursor: not-allowed; }
+button:focus-visible, select:focus-visible, input:focus-visible, .out:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.filter { display: flex; gap: 6px; flex-wrap: wrap; }
+.filter button { padding: 5px 10px; font-size: 13px; background: transparent; color: var(--fg); border: 1px solid var(--line); }
+.filter button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
 .list { display: grid; gap: 8px; }
 .item { display: grid; gap: 6px; padding: 10px; border: 1px solid var(--line); border-radius: 4px; min-width: 0; }
+.item .head { display: flex; gap: 6px; flex-wrap: wrap; align-items: baseline; }
 .item strong { font-weight: 600; }
-.item .code { font: 12px/1.5 ui-monospace, Consolas, monospace; overflow-x: auto; white-space: pre; color: var(--muted); }
+.tag { font-size: 12px; color: var(--muted); }
+.item .what { color: var(--muted); font-size: 13px; }
+.code { font: 12px/1.5 var(--mono); overflow-x: auto; white-space: pre; padding: 8px; background: var(--bg); border-radius: 4px; }
 .item button { padding: 6px 10px; font-size: 13px; background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+.rules { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+code { font: 12.5px var(--mono); background: var(--bg); padding: 1px 4px; border-radius: 3px; }
+a { color: var(--accent); }
 footer { color: var(--muted); font-size: 12px; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
@@ -71,23 +88,32 @@ footer { color: var(--muted); font-size: 12px; }
 
   <section class="card" aria-labelledby="gen">
     <h2 id="gen">Makro bauen</h2>
-    <label>Klasse
+    <label for="cls">Klasse
       <select id="cls"></select>
     </label>
-    <label>Heilzauber
-      <select id="heal"></select>
-    </label>
-    <label>Schadenszauber
-      <select id="harm"></select>
-    </label>
-    <fieldset class="modes" style="border:0;padding:0;margin:0">
-      <legend style="font-weight:500;margin-bottom:6px">Verhalten</legend>
-      <label><input type="radio" id="mode-target" name="mode" value="target" checked> Freund unter der Maus heilt, sonst Schaden auf das feindliche Ziel</label>
-      <label><input type="radio" id="mode-combo" name="mode" value="combo"> Alles per Mouseover: Freund heilt, Feind wird angegriffen, danach Ziel</label>
-      <label><input type="radio" id="mode-heal" name="mode" value="heal"> Nur heilen (Mouseover, sonst Ziel)</label>
-      <label><input type="radio" id="mode-harm" name="mode" value="harm"> Nur Schaden (Mouseover, sonst Ziel)</label>
+    <div class="row">
+      <label for="heal">Heilzauber
+        <select id="heal"></select>
+      </label>
+      <label for="harm">Schadenszauber
+        <select id="harm"></select>
+      </label>
+    </div>
+    <fieldset>
+      <legend>Verhalten</legend>
+      <label class="opt"><input type="radio" id="mode-target" name="mode" value="target" checked> <span>Freund unter der Maus heilen, sonst Schaden auf das feindliche Ziel</span></label>
+      <label class="opt"><input type="radio" id="mode-combo" name="mode" value="combo"> <span>Alles per Mouseover: Freund heilen, Feind angreifen, danach dein Ziel</span></label>
+      <label class="opt"><input type="radio" id="mode-heal" name="mode" value="heal"> <span>Nur heilen (Mouseover, sonst Ziel)</span></label>
+      <label class="opt"><input type="radio" id="mode-harm" name="mode" value="harm"> <span>Nur Schaden (Mouseover, sonst Ziel)</span></label>
     </fieldset>
-    <label class="check"><input type="checkbox" id="self" checked> Ohne Ziel auf dich selbst wirken (nur bei Heilung)</label>
+    <fieldset>
+      <legend>Extras</legend>
+      <label class="opt"><input type="checkbox" id="tip" checked> <span><code>#showtooltip</code> als erste Zeile<small>Zeigt Symbol, Abklingzeit und Reichweite des gerade aktiven Zaubers. Als Makro-Symbol das Fragezeichen wählen.</small></span></label>
+      <label class="opt"><input type="checkbox" id="alt"> <span>Alt gedrückt: immer dich selbst heilen<small>Alt + Taste darf dann nicht anders belegt sein.</small></span></label>
+      <label class="opt"><input type="checkbox" id="focus"> <span>Fokus als Heil-Ziel nach dem Mouseover<small>Praktisch, wenn der Tank als Fokus gesetzt ist.</small></span></label>
+      <label class="opt"><input type="checkbox" id="self"> <span>Sonst normal heilen<small>Ohne passendes Ziel geht die Heilung auf dein freundliches Ziel oder auf dich.</small></span></label>
+      <label class="opt"><input type="checkbox" id="compact"> <span>Leerzeichen sparen<small>Lässt die Leerzeichen nach <code>]</code> und <code>;</code> weg. Funktioniert genauso und spart Zeichen bei langen Makros.</small></span></label>
+    </fieldset>
     <textarea id="out" class="out" readonly aria-label="Erzeugtes Makro"></textarea>
     <div class="meta"><span id="len"></span><span id="lenNote"></span></div>
     <button id="copy" type="button">Makro kopieren</button>
@@ -95,46 +121,97 @@ footer { color: var(--muted); font-size: 12px; }
 
   <section class="card" aria-labelledby="lib">
     <h2 id="lib">Beispiel-Bibliothek</h2>
-    <p style="margin:0;color:var(--muted)">Fertige Makros für den Start. Ein Klick kopiert sie.</p>
+    <p class="hint">Fertige Makros zum Kopieren, nach Klasse gefiltert.</p>
+    <div class="filter" id="filter" role="group" aria-label="Nach Klasse filtern"></div>
     <div class="list" id="library"></div>
   </section>
 
-  <footer>Zaubernamen sind englische Vanilla-Namen. Vor dem Launch im Zauberbuch prüfen, falls ein Zauber nicht gelernt ist.</footer>
+  <section class="card" aria-labelledby="rules">
+    <h2 id="rules">So funktionieren Makros</h2>
+    <h3>Aufbau</h3>
+    <ul class="rules">
+      <li>Bedingungen stehen in eckigen Klammern. Alles in einer Klammer muss zutreffen: <code>[@mouseover,help,nodead]</code>.</li>
+      <li>Mehrere Klammern vor einem Zauber werden von links nach rechts geprüft, die erste passende gewinnt: <code>[@mouseover,help,nodead][] Heal</code>.</li>
+      <li>Eine leere Klammer <code>[]</code> heißt „normal wirken“.</li>
+      <li>Ein Semikolon trennt verschiedene Zauber mit eigenen Bedingungen: <code>[@mouseover,harm,nodead] Flame Shock; [] Healing Wave</code>.</li>
+      <li><code>help</code> und <code>harm</code> prüfen automatisch, ob das Ziel existiert. <code>[harm,exists]</code> ist also doppelt.</li>
+      <li>Fast jede Bedingung lässt sich mit „no“ umkehren: <code>combat</code> und <code>nocombat</code>, <code>channeling</code> und <code>nochanneling</code>.</li>
+      <li>Ein Makro läuft von oben nach unten. Pro Tastendruck ist nur ein Zauber mit globaler Abklingzeit möglich. Gegenstände wie Trinkets können zusätzlich ausgelöst werden.</li>
+      <li>Ein Makro hat höchstens 255 Zeichen. Statt Gegenstandsnamen gehen Ausrüstungsplätze: <code>/use 13</code> und <code>/use 14</code> sind die beiden Trinkets.</li>
+      <li>Leerzeichen nach <code>]</code>, <code>;</code> und <code>,</code> sind nicht nötig. <code>[@mouseover,help,nodead]Heal;[]Smite</code> funktioniert genauso und spart Zeichen.</li>
+    </ul>
+    <h3>Ziele</h3>
+    <ul class="rules">
+      <li><code>@mouseover</code> ist die Einheit unter dem Mauszeiger, <code>@player</code> bist du, <code>@target</code> dein Ziel, <code>@focus</code> dein Fokus, <code>@targettarget</code> das Ziel deines Ziels.</li>
+      <li>Modifikatoren: <code>[mod:shift]</code>, <code>[mod:ctrl]</code>, <code>[mod:alt]</code>. Die Tastenkombination darf dann nicht anders belegt sein.</li>
+      <li>Rollen wie „Tank“ kann ein Makro nicht direkt anvisieren, weil das Spiel nicht festlegt, wer Tank 1 oder Tank 2 ist. Setz den Tank als Fokus und nutze <code>@focus</code>.</li>
+    </ul>
+    <h3>Was ein Makro nicht kann</h3>
+    <p>Makros sehen keine Abklingzeiten, kein Leben, keine Buffs oder Debuffs und nicht, ob das Ziel gerade zaubert. Sie treffen keine Entscheidungen für dich. Tricks, die das umgehen, gelten als Ausnutzen und sollten nicht verwendet werden.</p>
+    <h3>Nützliche Befehle</h3>
+    <ul class="rules">
+      <li><code>/cast</code> für Zauber, <code>/use</code> für Gegenstände</li>
+      <li><code>/stopcasting</code> bricht den laufenden Zauber ab</li>
+      <li><code>/cancelaura Name</code> entfernt einen eigenen Buff</li>
+      <li><code>/equip Name</code> legt einen Gegenstand an, im Kampf nur Waffen</li>
+      <li><code>/petattack</code>, <code>/petfollow</code>, <code>/petpassive</code>, <code>/petdefensive</code> steuern das Tier</li>
+      <li><code>/focus [@mouseover,exists]</code> setzt den Fokus auf die Einheit unter der Maus</li>
+      <li><code>/castsequence reset=target A, B, C</code> wirkt Zauber der Reihe nach. Im Kampf meist ungünstig, weil du nicht reagieren kannst.</li>
+      <li><code>/stopmacro</code> stoppt alle folgenden Zeilen</li>
+      <li>Zeilen ohne <code>/</code> gehen als Text in den Chat. <code>/s</code>, <code>/p</code> oder <code>/g</code> leiten sie gezielt weiter.</li>
+    </ul>
+    <p class="hint">Vollständige Listen: <a href="https://warcraft.wiki.gg/wiki/Macro_conditionals" target="_blank" rel="noopener">Bedingungen</a> und <a href="https://warcraft.wiki.gg/wiki/Macro_commands" target="_blank" rel="noopener">Befehle</a> auf warcraft.wiki.gg. Grundlage: Leitfaden „Makros erstellen und ihre grundlegenden Möglichkeiten“ aus <a href="https://www.reddit.com/r/wownoob/s/xZOMpRWB1n" target="_blank" rel="noopener">r/wownoob</a>.</p>
+  </section>
+
+  <footer>Zaubernamen sind englische Classic-Namen. Ist ein Zauber noch nicht gelernt, passiert beim Drücken nichts. Vor dem Launch im Zauberbuch prüfen.</footer>
 </main>
 
 <script>
-// Spell data: heal and harm lists per class, English names as used by the client.
+// Spell lists per class, English client names.
 const CLASSES = {
-  Druid:   { heal: ["Healing Touch", "Regrowth", "Rejuvenation"], harm: ["Wrath", "Moonfire", "Insect Swarm"] },
-  Warrior: { heal: [], harm: ["Heroic Strike", "Thunder Clap"] },
-  Paladin: { heal: ["Holy Light", "Flash of Light"], harm: ["Judgement"] },
-  Hunter:  { heal: [], harm: ["Arcane Shot", "Serpent Sting"] },
-  Rogue:   { heal: [], harm: ["Sinister Strike", "Backstab"] },
-  Priest:  { heal: ["Heal", "Flash Heal", "Lesser Heal"], harm: ["Shadow Word: Pain"] },
-  Mage:    { heal: [], harm: ["Fireball", "Frostbolt"] },
-  Warlock: { heal: [], harm: ["Shadow Bolt", "Corruption", "Immolate"] },
-  Shaman:  { heal: ["Healing Wave", "Lesser Healing Wave"], harm: ["Lightning Bolt", "Earth Shock"] }
+  Druid:   { de: "Druide",       heal: ["Healing Touch", "Regrowth", "Rejuvenation"], harm: ["Wrath", "Moonfire", "Insect Swarm", "Entangling Roots", "Faerie Fire"] },
+  Paladin: { de: "Paladin",      heal: ["Holy Light", "Flash of Light", "Holy Shock"], harm: ["Judgement", "Holy Shock", "Hammer of Justice"] },
+  Priest:  { de: "Priester",     heal: ["Heal", "Flash Heal", "Lesser Heal", "Renew", "Power Word: Shield"], harm: ["Shadow Word: Pain", "Smite", "Mind Blast", "Mind Flay"] },
+  Shaman:  { de: "Schamane",     heal: ["Healing Wave", "Lesser Healing Wave", "Chain Heal"], harm: ["Lightning Bolt", "Flame Shock", "Earth Shock", "Frost Shock"] },
+  Warrior: { de: "Krieger",      heal: [], harm: ["Heroic Strike", "Charge", "Taunt", "Pummel", "Shield Bash"] },
+  Hunter:  { de: "Jäger",        heal: [], harm: ["Arcane Shot", "Serpent Sting", "Hunter's Mark", "Concussive Shot"] },
+  Rogue:   { de: "Schurke",      heal: [], harm: ["Sinister Strike", "Backstab", "Kick", "Sap", "Gouge"] },
+  Mage:    { de: "Magier",       heal: [], harm: ["Fireball", "Frostbolt", "Counterspell", "Polymorph", "Fire Blast"] },
+  Warlock: { de: "Hexenmeister", heal: [], harm: ["Shadow Bolt", "Corruption", "Immolate", "Curse of Agony", "Fear"] }
 };
 
-// Examples for the library: [label, class, macro text]
+// Library: [title, class key or "Alle", what it does, macro text]
 const LIBRARY = [
-  ["Druid: Freund per Maus heilen, sonst Feind-Ziel", "Druid", "/cast [@mouseover,help,nodead] Healing Touch; [harm,nodead] Wrath"],
-  ["Druid: alles per Mouseover", "Druid", "/cast [@mouseover,help,nodead] Healing Touch; [@mouseover,harm,nodead] Wrath; [help,nodead] Healing Touch; [harm,nodead] Wrath; [] Healing Touch"],
-  ["Paladin heal per Mouseover", "Paladin", "/cast [@mouseover,help,nodead][help,nodead][] Holy Light"],
-  ["Priest heal per Mouseover", "Priest", "/cast [@mouseover,help,nodead][help,nodead][] Flash Heal"],
-  ["Hunter pet attack", "Hunter", "/petattack"],
-  ["Rogue stealth out of combat", "Rogue", "/cast [nocombat] Stealth"],
-  ["Mage water", "Mage", "/cast Conjure Water"]
+  ["Freund per Maus heilen, sonst Feind-Ziel", "Druid", "Dein Haupt-Makro für Heilen und Schaden auf einer Taste.", "#showtooltip\n/cast [@mouseover,help,nodead][help,nodead] Healing Touch; [harm,nodead] Wrath"],
+  ["Formen ohne Rückwechsel", "Druid", "Wechselt in Bärengestalt und bleibt drin, auch bei doppeltem Drücken.", "#showtooltip\n/cast [noform:1] Bear Form"],
+  ["Anregen auf den Heiler", "Druid", "Mouseover, sonst Fokus, sonst Ziel.", "#showtooltip\n/cast [@mouseover,help,nodead][@focus,help,nodead][] Innervate"],
+  ["Heilen per Mouseover", "Paladin", "Freund unter der Maus, sonst Ziel, Alt heilt dich selbst.", "#showtooltip\n/cast [mod:alt,@player][@mouseover,help,nodead][] Holy Light"],
+  ["Schild per Mouseover", "Priest", "Schild auf den Freund unter der Maus, sonst normal.", "#showtooltip\n/cast [@mouseover,help,nodead][] Power Word: Shield"],
+  ["Gedankenschinden ohne Abbruch", "Priest", "Wirkt nur, wenn du nicht schon kanalisierst. Braucht den Zaubernamen hinter #showtooltip.", "#showtooltip Mind Flay\n/cast [nochanneling] Mind Flay"],
+  ["Flammenschock oder Heilung", "Shaman", "Feind unter der Maus bekommt Flammenschock, sonst Heilung auf den Freund unter der Maus oder normal.", "#showtooltip\n/cast [@mouseover,harm,nodead] Flame Shock; [@mouseover,help,nodead][] Healing Wave"],
+  ["Zuschlagen per Mouseover", "Warrior", "Unterbricht den Feind unter der Maus, sonst dein Ziel.", "#showtooltip\n/cast [@mouseover,harm,nodead][] Pummel"],
+  ["Tier angreifen lassen", "Hunter", "Schickt das Tier auf dein Ziel und schießt.", "#showtooltip Arcane Shot\n/petattack\n/cast Arcane Shot"],
+  ["Tritt per Mouseover", "Rogue", "Unterbricht den Feind unter der Maus, sonst dein Ziel.", "#showtooltip\n/cast [@mouseover,harm,nodead][] Kick"],
+  ["Verstohlenheit nur außerhalb des Kampfes", "Rogue", "Verhindert versehentliches Drücken im Kampf.", "#showtooltip\n/cast [nocombat] Stealth"],
+  ["Gegenzauber per Mouseover", "Mage", "Unterbricht den Feind unter der Maus, sonst dein Ziel.", "#showtooltip\n/cast [@mouseover,harm,nodead][] Counterspell"],
+  ["Verwandlung auf den Fokus", "Mage", "Schaf auf den Fokus, Shift wirkt auf das Ziel.", "#showtooltip\n/cast [mod:shift][@focus,harm,nodead][] Polymorph"],
+  ["Tier und Schattenblitz", "Warlock", "Schickt den Dämon los und wirkt Schattenblitz.", "#showtooltip Shadow Bolt\n/petattack\n/cast Shadow Bolt"],
+  ["Fokus per Maus setzen", "Alle", "Setzt den Fokus auf die Einheit unter dem Mauszeiger.", "/focus [@mouseover,exists]"],
+  ["Trinket mit Angriff", "Alle", "Löst das untere Trinket aus und wirkt danach den Zauber. Zauber an deine Klasse anpassen.", "#showtooltip Fireball\n/use 14\n/cast Fireball"],
+  ["Zauber abbrechen", "Alle", "Bricht den laufenden Zauber ab, z. B. für einen Unterbrecher.", "/stopcasting"]
 ];
 
 const $ = (id) => document.getElementById(id);
+let libFilter = "Alle";
 
 function fillSelect(sel, items, empty) {
   sel.innerHTML = "";
   if (!items.length) {
     const o = document.createElement("option");
-    o.value = ""; o.textContent = empty; sel.appendChild(o); return;
+    o.value = ""; o.textContent = empty; sel.appendChild(o);
+    sel.disabled = true; return;
   }
+  sel.disabled = false;
   for (const it of items) {
     const o = document.createElement("option");
     o.value = it; o.textContent = it; sel.appendChild(o);
@@ -143,101 +220,125 @@ function fillSelect(sel, items, empty) {
 
 function refreshSpells() {
   const c = CLASSES[$("cls").value];
-  fillSelect($("heal"), c.heal, "keiner verfügbar");
+  fillSelect($("heal"), c.heal, "Diese Klasse hat keine Heilung");
   fillSelect($("harm"), c.harm, "keiner verfügbar");
 }
 
+// Builds clauses, then joins neighbours with the same spell into one bracket chain.
 function buildMacro() {
-  const h = $("heal").value;
-  const x = $("harm").value;
+  const h = $("heal").value, x = $("harm").value;
   const mode = document.querySelector('input[name="mode"]:checked').value;
-  const self = $("self").checked;
-  let parts = [];
-  if (mode === "heal" && h) {
-    parts.push("[@mouseover,help,nodead]" + (self ? "[help,nodead][] " : "[help,nodead] ") + h);
-  } else if (mode === "harm" && x) {
-    parts.push("[@mouseover,harm,nodead][harm,nodead] " + x);
+  const alt = $("alt").checked, focus = $("focus").checked, self = $("self").checked;
+  const c = [];
+  const add = (cond, spell) => { if (spell) c.push([cond, spell]); };
+  const healFront = () => {
+    if (alt) add("[mod:alt,@player]", h);
+    add("[@mouseover,help,nodead]", h);
+    if (focus) add("[@focus,help,nodead]", h);
+  };
+  if (mode === "heal") {
+    healFront(); add("[help,nodead]", h); if (self) add("[]", h);
+  } else if (mode === "harm") {
+    add("[@mouseover,harm,nodead]", x); add("[harm,nodead]", x);
   } else if (mode === "target") {
-    if (h) parts.push("[@mouseover,help,nodead] " + h);
-    if (x) parts.push("[harm,nodead] " + x);
-    if (h && self && !x) parts.push("[] " + h);
-  } else if (mode === "combo") {
-    if (h) parts.push("[@mouseover,help,nodead] " + h);
-    if (x) parts.push("[@mouseover,harm,nodead] " + x);
-    if (h) parts.push("[help,nodead] " + h);
-    if (x) parts.push("[harm,nodead] " + x);
-    if (h && self) parts.push("[] " + h);
+    healFront(); add("[help,nodead]", h); add("[harm,nodead]", x); if (self) add("[]", h);
+  } else {
+    if (alt) add("[mod:alt,@player]", h);
+    add("[@mouseover,help,nodead]", h);
+    add("[@mouseover,harm,nodead]", x);
+    if (focus) add("[@focus,help,nodead]", h);
+    add("[help,nodead]", h); add("[harm,nodead]", x);
+    if (self) add("[]", h);
   }
-  if (!parts.length) return "";
-  if (mode === "heal" || mode === "harm") {
-    return "/cast " + parts[0];
+  if (!c.length) return "";
+  const groups = [];
+  for (const [cond, spell] of c) {
+    const last = groups[groups.length - 1];
+    if (last && last.spell === spell) last.conds.push(cond);
+    else groups.push({ conds: [cond], spell });
   }
-  return "/cast " + parts.join("; ");
+  const tight = $("compact").checked;
+  const line = "/cast " + groups.map((g) => g.conds.join("") + (tight ? "" : " ") + g.spell).join(tight ? ";" : "; ");
+  return ($("tip").checked ? "#showtooltip\n" : "") + line;
 }
 
 function update() {
   const m = buildMacro();
-  $("out").value = m || "Wähle einen Zauber, der zur Rolle passt.";
-  const n = m.length;
+  $("out").value = m || "Wähle einen Zauber, der zum Verhalten passt.";
+  const n = m.length, over = n > 255;
   $("len").textContent = n + " / 255 Zeichen";
-  const over = n > 255;
   $("len").className = over ? "over" : "";
-  $("lenNote").textContent = m ? (over ? "Zu lang: bitte kürzen" : "Passt in das Limit") : "";
+  $("lenNote").textContent = m ? (over ? "Zu lang: Extras abwählen" : "Passt in das Limit") : "";
   $("lenNote").className = m ? (over ? "over" : "fine") : "";
   $("copy").disabled = !m || over;
 }
 
 async function copyText(text, btn) {
+  const label = btn.dataset.label;
   try {
     await navigator.clipboard.writeText(text);
     btn.textContent = "Kopiert";
   } catch (e) {
     const ta = document.createElement("textarea");
     ta.value = text; document.body.appendChild(ta); ta.select();
-    try { document.execCommand("copy"); btn.textContent = "Kopiert"; }
-    catch (_) { btn.textContent = "Markieren und kopieren"; }
+    let ok = false;
+    try { ok = document.execCommand("copy"); } catch (_) {}
     ta.remove();
+    btn.textContent = ok ? "Kopiert" : "Bitte markieren und kopieren";
   }
-  setTimeout(() => { btn.textContent = btn.dataset.label || "Kopieren"; }, 1600);
+  setTimeout(() => { btn.textContent = label; }, 1600);
+}
+
+function renderFilter() {
+  const wrap = $("filter");
+  wrap.innerHTML = "";
+  const keys = ["Alle", ...Object.keys(CLASSES)];
+  for (const k of keys) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.textContent = k === "Alle" ? "Alle" : CLASSES[k].de;
+    b.setAttribute("aria-pressed", String(k === libFilter));
+    b.addEventListener("click", () => { libFilter = k; renderFilter(); renderLibrary(); });
+    wrap.appendChild(b);
+  }
 }
 
 function renderLibrary() {
   const wrap = $("library");
   wrap.innerHTML = "";
-  for (const [label, cls, text] of LIBRARY) {
+  const items = LIBRARY.filter(([, cls]) => libFilter === "Alle" || cls === libFilter || cls === "Alle");
+  for (const [title, cls, what, text] of items) {
     const box = document.createElement("div");
     box.className = "item";
     const head = document.createElement("div");
-    head.innerHTML = "<strong></strong> <span style='color:var(--muted)'></span>";
-    head.querySelector("strong").textContent = label;
-    head.querySelector("span").textContent = "· " + cls;
-    const code = document.createElement("div");
-    code.className = "code";
-    code.textContent = text;
+    head.className = "head";
+    const s = document.createElement("strong"); s.textContent = title;
+    const t = document.createElement("span"); t.className = "tag"; t.textContent = cls === "Alle" ? "Alle Klassen" : CLASSES[cls].de;
+    head.append(s, t);
+    const w = document.createElement("div"); w.className = "what"; w.textContent = what;
+    const code = document.createElement("div"); code.className = "code"; code.textContent = text;
     const btn = document.createElement("button");
-    btn.type = "button";
-    btn.dataset.label = "Kopieren";
-    btn.textContent = "Kopieren";
+    btn.type = "button"; btn.dataset.label = "Kopieren"; btn.textContent = "Kopieren";
     btn.addEventListener("click", () => copyText(text, btn));
-    box.append(head, code, btn);
+    box.append(head, w, code, btn);
     wrap.appendChild(box);
   }
 }
 
 function init() {
   const sel = $("cls");
-  for (const name of Object.keys(CLASSES)) {
+  for (const [key, v] of Object.entries(CLASSES)) {
     const o = document.createElement("option");
-    o.value = name; o.textContent = name; sel.appendChild(o);
+    o.value = key; o.textContent = v.de; sel.appendChild(o);
   }
   sel.value = "Druid";
   refreshSpells();
   sel.addEventListener("change", () => { refreshSpells(); update(); });
-  for (const id of ["heal", "harm", "self"]) $(id).addEventListener("change", update);
+  for (const id of ["heal", "harm", "tip", "alt", "focus", "self", "compact"]) $(id).addEventListener("change", update);
   document.querySelectorAll('input[name="mode"]').forEach((r) => r.addEventListener("change", update));
   $("copy").dataset.label = "Makro kopieren";
-  $("copy").textContent = "Makro kopieren";
   $("copy").addEventListener("click", () => copyText($("out").value, $("copy")));
+  renderFilter();
   renderLibrary();
   update();
 }
