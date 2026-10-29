@@ -122,7 +122,7 @@ footer { color: var(--muted); font-size: 12px; }
     <fieldset>
       <legend>Extras</legend>
       <label class="opt"><input type="checkbox" id="tip" checked> <span><code>#showtooltip</code> als erste Zeile<small>Zeigt Symbol, Abklingzeit und Reichweite des gerade aktiven Zaubers. Als Makro-Symbol das Fragezeichen wählen.</small></span></label>
-      <label class="opt"><input type="checkbox" id="alt"> <span>Alt gedrückt: immer dich selbst heilen<small>Alt + Taste darf dann nicht anders belegt sein.</small></span></label>
+      <label class="opt"><input type="checkbox" id="alt"> <span>Alt gedrückt: immer dich selbst heilen<small>Alt ist in WoW Forever ohnehin die Standard-Taste für Selbstzauber. Alt + Taste darf dann nicht anders belegt sein.</small></span></label>
       <label class="opt"><input type="checkbox" id="focus"> <span>Fokus als Heil-Ziel nach dem Mouseover<small>Praktisch, wenn der Tank als Fokus gesetzt ist (<code>/focus</code>).</small></span></label>
       <label class="opt"><input type="checkbox" id="attack"> <span>Automatischen Angriff starten<small>Fügt <code>/startattack [harm,nodead]</code> hinzu. Sinnvoll für Nahkämpfer, startet nur auf feindliche Ziele.</small></span></label>
       <label class="opt"><input type="checkbox" id="self"> <span>Sonst dich selbst heilen<small>Ohne passendes Ziel geht die Heilung auf dich (<code>[@player]</code>).</small></span></label>
@@ -225,7 +225,9 @@ footer { color: var(--muted); font-size: 12px; }
     <ul class="rules">
       <li>Seit dem 16.10. löst eine Schriftrolle die globale Abklingzeit aus. Schriftrolle und Zauber auf einem Tastendruck geht nicht mehr.</li>
       <li>Seit dem 08.10. kann <code>/equipslot</code> mehrere Waffen innerhalb einer globalen Abklingzeit wechseln.</li>
-      <li><code>/cc</code> öffnet das Klick-Heilen für Gruppen- und Schlachtzugsfenster. Das ersetzt viele Mouseover-Makros.</li>
+      <li><code>/cc</code> öffnet das Klick-Heilen für Gruppen- und Schlachtzugsfenster. Das ersetzt viele Mouseover-Makros. Solange das Fenster offen ist, ist „Neu“ im Makro-Fenster ausgegraut.</li>
+      <li>Alt ist die Standard-Taste für Selbstzauber.</li>
+      <li>Passt ein Makro nicht in 255 Zeichen, teil es auf zwei Tasten auf.</li>
       <li><code>/run</code>-Skripte unterliegen denselben Einschränkungen wie Addons und sehen im Kampf nicht alles.</li>
       <li>Noch nicht bestätigt: die Zahl der Makro-Plätze und ob Einschränkungen aus Retail übernommen werden.</li>
     </ul>
@@ -253,6 +255,8 @@ footer { color: var(--muted); font-size: 12px; }
       <li><a href="https://mmonster.co/de/wow-forever/guides/macros" target="_blank" rel="noopener">WoW Forever Makros (mmonster)</a>: Sprache, Fokus, Ränge, Forever-Besonderheiten</li>
       <li><a href="https://www.wowhead.com/forever/guide/beginners-guide-to-writing-macros-in-wow-forever-34950" target="_blank" rel="noopener">Beginners Guide to Writing Macros in WoW Forever (Wowhead)</a>: Ränge, Haltungen, Beispiele</li>
       <li><a href="https://classicwowforever.com/macros/" target="_blank" rel="noopener">Macros (Classic WoW Forever)</a>: Makros je Klasse</li>
+      <li><a href="https://rankedboost.com/world-of-warcraft/forever/macros/" target="_blank" rel="noopener">WoW Forever Macros (RankedBoost)</a>: Fokus-Makro für Kontrollzauber, Selbstzauber-Taste</li>
+      <li><a href="https://kami-labs.fr/en/wow-forever/macros-wow-forever-9-classes/" target="_blank" rel="noopener">240 macros for 9 classes (Kami Labs)</a></li>
       <li><a href="https://www.wowisclassic.com/en/guide/how-to-make-macros/" target="_blank" rel="noopener">How to make macros (WoWisClassic)</a></li>
       <li><a href="https://www.reddit.com/r/wownoob/s/xZOMpRWB1n" target="_blank" rel="noopener">Makro-Leitfaden auf r/wownoob</a></li>
       <li><a href="https://marvolomania.de/makros-in-world-of-warcraft-alles-was-du-wissen-musst/" target="_blank" rel="noopener">Makros in World of Warcraft (Marvolomania)</a></li>
@@ -338,13 +342,13 @@ const LIBRARY = [
   ["Tritt per Mouseover", "Rogue", "Unterbricht den Feind unter der Maus, sonst dein Ziel.", "#showtooltip\n/cast [@mouseover,harm,nodead][] Kick"],
   ["Verstohlenheit nur außerhalb des Kampfes", "Rogue", "Verhindert versehentliches Drücken im Kampf.", "#showtooltip\n/cast [nocombat] Stealth"],
   ["Gegenzauber sofort", "Mage", "Bricht den eigenen Zauber ab und unterbricht den Feind unter der Maus, sonst dein Ziel.", "#showtooltip Counterspell\n/stopcasting\n/cast [@mouseover,harm,nodead][] Counterspell"],
-  ["Verwandlung auf den Fokus", "Mage", "Schaf auf den Fokus, wenn er ein lebender Feind ist, sonst auf dein Ziel.", "#showtooltip\n/cast [@focus,harm,nodead][] Polymorph"],
+  ["Verwandlung merkt sich das Ziel", "Mage", "Ohne lebenden Fokus wird dein Ziel zum Fokus, dann bekommt der Fokus das Schaf. So erneuerst du die Verwandlung mit einem Druck, während du etwas anderes angreifst. Strg setzt dein aktuelles Ziel als neuen Fokus. Klappt genauso mit Furcht oder Winterschlaf.", "#showtooltip Polymorph\n/focus [@focus,noexists][@focus,dead][mod:ctrl]\n/cast [@focus,harm,nodead][@target,harm,nodead] Polymorph"],
   ["Tier und Schattenblitz", "Warlock", "Schickt den Dämon los und wirkt Schattenblitz.", "#showtooltip Shadow Bolt\n/petattack\n/cast Shadow Bolt"],
   ["Furcht auf den Fokus", "Warlock", "Furcht auf den Fokus, wenn er ein lebender Feind ist, sonst auf dein Ziel.", "#showtooltip\n/cast [@focus,harm,nodead][] Fear"],
   ["DoTs der Reihe nach", "Warlock", "Jeder Druck wirkt den nächsten Zauber, neues Ziel startet von vorn. Schlägt ein Zauber fehl, bleibt die Folge stehen, deshalb nicht im Dauerfeuer drücken.", "#showtooltip\n/castsequence reset=target Immolate, Corruption, Curse of Agony"],
   ["Fokus per Maus setzen", "Alle", "Setzt den Fokus auf die Einheit unter dem Mauszeiger, z. B. den Tank.", "/focus [@mouseover,exists]"],
   ["Fokus löschen", "Alle", "Entfernt den Fokus.", "/clearfocus"],
-  ["Schmuckstück mit Hauptzauber", "Alle", "Löst das obere Schmuckstück aus und wirkt danach den Zauber. Zauber an deine Klasse anpassen.", "#showtooltip Fireball\n/use 13\n/cast Fireball"],
+  ["Schmuckstücke mit Hauptzauber", "Alle", "Löst beide Schmuckstücke aus, sofern bereit, und wirkt danach den Zauber. Zauber an deine Klasse anpassen.", "#showtooltip Fireball\n/use 13\n/use 14\n/cast Fireball"],
   ["Zauber abbrechen", "Alle", "Bricht den laufenden Zauber ab, z. B. für einen Unterbrecher.", "/stopcasting"]
 ];
 
