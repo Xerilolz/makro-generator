@@ -135,7 +135,7 @@ footer { color: var(--muted); font-size: 12px; }
 
   <section class="card" aria-labelledby="any">
     <h2 id="any">Jede Fähigkeit als Makro</h2>
-    <p class="hint">Alle wirkbaren Fähigkeiten der oben gewählten Klasse, sortiert nach Stufe. Das Makro passt sich der Art der Fähigkeit an. Die Extras von oben gelten mit.</p>
+    <p class="hint">Alle wirkbaren Fähigkeiten der oben gewählten Klasse, sortiert nach Stufe, auch die aus Talenten. Das Makro passt sich der Art der Fähigkeit an. Die Extras von oben gelten mit.</p>
     <label for="anySpell">Fähigkeit
       <select id="anySpell"></select>
     </label>
@@ -245,6 +245,19 @@ footer { color: var(--muted); font-size: 12px; }
       <li>Noch nicht bestätigt: die Zahl der Makro-Plätze und ob Einschränkungen aus Retail übernommen werden.</li>
     </ul>
 
+    <h3>Änderungen in Forever, die Makros betreffen</h3>
+    <ul class="rules">
+      <li><strong>Druide:</strong> Omen der Klarsicht ist jetzt passiv und lässt sich nicht mehr wirken. Griff der Natur ist ab Stufe 10 trainierbar. Neu sind Wiederbelebung (außerhalb des Kampfes, 10 Sek. Zauberzeit) und Aufschlitzen in Bärengestalt ab Stufe 42. Insektenschwarm, Rasche Heilung, Moonkingestalt und Wildwuchs kommen aus Talenten.</li>
+      <li><strong>Paladin:</strong> Richturteil verbraucht das Siegel nicht mehr, hat 10 Meter Reichweite und 10 Sek. Abklingzeit. Siegel des Furors ist das Tank-Siegel, sein Richturteil verspottet 4 Sek. Heiliger Stoß ist ab Stufe 6 Grundfähigkeit. Segen der Könige und Weihe sind trainierbar.</li>
+      <li><strong>Priester:</strong> Sühne, Verbindende Heilung und Gebet der Besserung lernst du über Talente, höhere Ränge beim Lehrer. Schattenwort: Tod ist neu, ab Stufe 32.</li>
+      <li><strong>Schamane:</strong> Feuernova ist jetzt ein Zauber statt Totem und trifft alles um dein Feuertotem. Totemische Projektion versetzt deine Totems. Ruf der Elemente, der Urahnen und der Geister setzen bis zu vier Totems aus der Totemleiste auf einmal. Viele Totems halten 5 Minuten.</li>
+      <li><strong>Krieger:</strong> Siegesrausch ist Grundfähigkeit. Taktiker ist passiv. Schildwall, Gegenschlag und Tollkühnheit haben eigene Abklingzeiten. Schildblock hält 2 Treffer.</li>
+      <li><strong>Jäger:</strong> Gezielter Schuss ist trainierbar und teilt sich die Abklingzeit mit Mehrfachschuss. „Tier rufen“ heißt im Zauberbuch nach deinem Tier, z. B. „Eule rufen“. Prüf den Namen per Shift-Klick, bevor du ihn ins Makro schreibst.</li>
+      <li><strong>Schurke:</strong> Verstümmeln und Toxin sind neue Talente. Schurken können jetzt Einhand-Äxte tragen.</li>
+      <li><strong>Magier:</strong> Arkanschlag und Eislanze lernst du über Talente, Frostfeuerblitz ab Stufe 40 beim Lehrer.</li>
+      <li><strong>Hexenmeister:</strong> Omen und Flüche sind getrennt. Du kannst ein Omen und einen Fluch gleichzeitig auf einem Ziel haben.</li>
+    </ul>
+
     <h3>Ausrüstungsplätze für <code>/use</code></h3>
     <div class="tablewrap">
       <table>
@@ -266,6 +279,7 @@ footer { color: var(--muted); font-size: 12px; }
     <h3>Quellen</h3>
     <ul class="rules">
       <li><a href="https://www.wowhead.com/forever/spells/abilities" target="_blank" rel="noopener">Fähigkeiten-Datenbank WoW Forever (Wowhead)</a>: alle Fähigkeiten mit englischen und deutschen Namen, Stand 29.10.2026</li>
+      <li><a href="https://talentsforever.com/" target="_blank" rel="noopener">Talents Forever</a>: Talentfähigkeiten, Zauberbücher und Änderungen je Klasse aus dem Beta-Client</li>
       <li><a href="https://mmonster.co/de/wow-forever/guides/macros" target="_blank" rel="noopener">WoW Forever Makros (mmonster)</a>: Sprache, Fokus, Ränge, Forever-Besonderheiten</li>
       <li><a href="https://www.wowhead.com/forever/guide/beginners-guide-to-writing-macros-in-wow-forever-34950" target="_blank" rel="noopener">Beginners Guide to Writing Macros in WoW Forever (Wowhead)</a>: Ränge, Haltungen, Beispiele</li>
       <li><a href="https://classicwowforever.com/macros/" target="_blank" rel="noopener">Macros (Classic WoW Forever)</a>: Makros je Klasse</li>
@@ -278,12 +292,13 @@ footer { color: var(--muted); font-size: 12px; }
     </ul>
   </section>
 
-  <footer>Stand: Beta-Client 1.60.1, Fähigkeiten aus der Wowhead-Datenbank vom 29.10.2026. Fähigkeiten aus Talenten sind nicht enthalten. Die Makros sind im Live-Client noch nicht getestet. Ist ein Zauber noch nicht gelernt, passiert beim Drücken nichts. Weicht ein deutscher Name ab, per Shift-Klick aus dem Zauberbuch übernehmen.</footer>
+  <footer>Stand: Beta-Client 1.60.1, Trainer-Fähigkeiten aus der Wowhead-Datenbank, Talentfähigkeiten, Gifte und Korrekturen aus talentsforever.com (Beta-Client 1.60.1.70630), Stand 29.10.2026. Tier- und Dämonenfähigkeiten sind nicht enthalten. Die Makros sind im Live-Client noch nicht getestet. Ist ein Zauber noch nicht gelernt, passiert beim Drücken nichts. Weicht ein deutscher Name ab, per Shift-Klick aus dem Zauberbuch übernehmen.</footer>
 </main>
 
 <script>
-// Abilities per class from the Wowhead WoW Forever database (29.10.2026).
-// Line format: level|English|German|type|N (N = new in Forever)
+// Abilities per class: trainer spells from the Wowhead WoW Forever database (29.10.2026),
+// talent abilities and corrections from talentsforever.com (beta client 1.60.1.70630).
+// Line format: level|English|German|type|flags (N = new in Forever, T = learned from a talent)
 // Types: H friendly target, D enemy target (ranged), M enemy target (melee), R revive dead friend,
 // B friend or enemy, F shapeshift form, O no target / self / ground
 const SPELL_DATA = {
@@ -309,7 +324,6 @@ Druid: `1|Mark of the Wild|Mal der Wildnis|H
 18|Faerie Fire|Feenfeuer|D
 18|Maul|Zermalmen|M
 18|Hibernate|Winterschlaf|D
-20|Omen of Clarity|Omen der Klarsicht|O
 20|Cat Form|Katzengestalt|F
 20|Starfire|Sternenfeuer|D
 20|Prowl|Schleichen|O
@@ -317,29 +331,34 @@ Druid: `1|Mark of the Wild|Mal der Wildnis|H
 20|Rebirth|Wiedergeburt|R
 20|Rip|Zerfetzen|M
 20|Claw|Klaue|M
+20|Feral Charge|Wilde Attacke|D|T
 22|Soothe Animal|Tier besänftigen|D
-24|Tiger's Fury|Tigerfuror|O
 24|Remove Curse|Fluch aufheben|H
 24|Rake|Krallenhieb|M
+25|Insect Swarm|Insektenschwarm|D|T
+25|Primal Bite|Urtümlicher Biss|M|NT
+25|Shifting Power|Machtverschiebung|O|T
+25|Swiftmend|Rasche Heilung|H|T
 26|Dash|Spurt|O
 26|Abolish Poison|Vergiftung aufheben|H
 28|Challenging Roar|Herausforderndes Gebrüll|O
 28|Cower|Ducken|M
 30|Travel Form|Reisegestalt|F
 30|Tranquility|Gelassenheit|O
-30|Insect Swarm|Insektenschwarm|D
+30|Nature's Swiftness|Schnelligkeit der Natur|O|T
 32|Ferocious Bite|Wilder Biss|M
 32|Ravage|Verheeren|M
 32|Track Humanoids|Humanoide aufspüren|O
 36|Frenzied Regeneration|Rasende Regeneration|O
-36|Primal Bite|Urtümlicher Biss|M|N
 36|Pounce|Anspringen|M
 40|Innervate|Anregen|H
 40|Dire Bear Form|Terrorbärengestalt|F
 40|Hurricane|Hurrikan|O
+40|Wild Growth|Wildwuchs|H|NT
+40|Berserk|Berserker|O|T
+40|Moonkin Form|Moonkingestalt|F|T
 42|Lacerate|Aufschlitzen|M|N
 44|Barkskin|Baumrinde|O
-50|Wild Growth|Wildwuchs|H|N
 50|Gift of the Wild|Gabe der Wildnis|O`,
 Paladin: `1|Sense Undead|Untote spüren|O
 1|Holy Light|Heiliges Licht|H
@@ -364,27 +383,31 @@ Paladin: `1|Sense Undead|Untote spüren|O
 20|Blessing of Kings|Segen der Könige|H
 20|Exorcism|Exorzismus|D
 20|Flash of Light|Lichtblitz|H
+20|Seal of Command|Siegel des Befehls|O|T
+20|Voice of Truth|Stimme der Wahrheit|O|T
 22|Seal of Justice|Siegel der Gerechtigkeit|O
 22|Concentration Aura|Aura der Konzentration|O
 24|Turn Undead|Untote vertreiben|D
+25|Divine Favor|Göttliche Gunst|O|T
+25|Swift Judgement|Schnelles Richturteil|O|T
 26|Salvation|Rettung|H
 26|Revoke|Widerrufen|H|N
 28|Shadow Resistance Aura|Aura des Schattenwiderstands|O
-30|Seal of Command|Siegel des Befehls|O
 30|Seal of Light|Siegel des Lichts|O
 30|Divine Intervention|Göttliches Eingreifen|H
+30|Holy Shock|Heiliger Schock|B|T
+30|Repentance|Buße|D|T
+30|Templar's Bulwark|Bollwerk des Templers|O|T
 32|Frost Resistance Aura|Aura des Frostwiderstands|O
 34|Divine Shield|Gottesschild|O
 36|Fire Resistance Aura|Aura des Feuerwiderstands|O
 38|Seal of Wisdom|Siegel der Weisheit|O
-40|Holy Shock|Heiliger Schock|B
 40|Blessing of Light|Segen des Lichts|H
-40|Hammer of the Righteous|Hammer der Rechtschaffenen|M|N
+40|Light's Vigil|Lichtwacht|H|NT
+40|Holy Shield|Heiliger Schild|O|T
 42|Cleanse|Reinigung des Glaubens|H
 44|Hammer of Wrath|Hammer des Zorns|D
 46|Blessing of Sacrifice|Segen der Opferung|H
-50|Light's Vigil|Lichtwacht|H|N
-50|Holy Shield|Heiliger Schild|O
 50|Holy Wrath|Heiliger Zorn|O
 52|Greater Blessing of Might|Großer Segen der Macht|H
 54|Greater Blessing of Wisdom|Großer Segen der Weisheit|H
@@ -423,23 +446,27 @@ Priest: `1|Power Word: Fortitude|Machtwort: Seelenstärke|H
 20|Holy Fire|Heiliges Feuer|D
 20|Mind Soothe|Gedankenbesänftigung|D
 20|Shackle Undead|Untote fesseln|D
+20|Mind Flay|Gedankenschinden|D|T
+20|Holy Nova|Heilige Nova|O|T
+20|Inner Focus|Innerer Fokus|O|T
 22|Mind Vision|Gedankensicht|O
 24|Mana Burn|Manabrand|D
-28|Mind Flay|Gedankenschinden|D
-28|Holy Nova|Heilige Nova|O
+25|Binding Heal|Verbindende Heilung|H|NT
+25|Vampiric Embrace|Vampirumarmung|D|T
 30|Divine Spirit|Göttlicher Willen|H
 30|Prayer of Healing|Gebet der Heilung|H
 30|Mind Control|Gedankenkontrolle|D
 30|Shadow Protection|Schattenschutz|H
+30|Penance|Sühne|B|NT
+30|Silence|Stille|D|T
 32|Shadow Word: Death|Schattenwort: Tod|D|N
-32|Binding Heal|Verbindende Heilung|H|N
 32|Abolish Disease|Krankheit aufheben|H
 34|Levitate|Levitieren|O
-40|Penance|Sühne|B|N
 40|Greater Heal|Große Heilung|H
+40|Prayer of Mending|Gebet der Besserung|H|NT
+40|Power Infusion|Seele der Macht|H|T
+40|Shadowform|Schattengestalt|F|T
 48|Prayer of Fortitude|Gebet der Seelenstärke|O
-50|Lightwell|Brunnen des Lichts|O
-50|Prayer of Mending|Gebet der Besserung|H|N
 56|Prayer of Shadow Protection|Gebet des Schattenschutzes|O
 60|Prayer of Spirit|Gebet der Willenskraft|O`,
 Shaman: `1|Rockbiter Weapon|Waffe des Felsbeißers|O
@@ -466,11 +493,14 @@ Shaman: `1|Rockbiter Weapon|Waffe des Felsbeißers|O
 20|Lesser Healing Wave|Geringe Welle der Heilung|H
 20|Frost Shock|Frostschock|D
 20|Frostbrand Weapon|Waffe des Frostbrands|O
+20|Water Shield|Wasserschild|O|T
 22|Totemic Projection|Totemische Projektion|O
 22|Poison Cleansing Totem|Totem der Giftreinigung|O
 22|Water Breathing|Wasseratmung|H
 22|Cure Disease|Krankheit heilen|H
 24|Frost Resistance Totem|Totem des Frostwiderstands|O
+25|Mana Tide Totem|Totem der Manaflut|O|NT
+25|Stormstrike|Sturmschlag|M|T
 26|Magma Totem|Totem der glühenden Magma|O
 26|Mana Spring Totem|Totem der Manaquelle|O
 26|Far Sight|Fernsicht|O
@@ -482,17 +512,19 @@ Shaman: `1|Rockbiter Weapon|Waffe des Felsbeißers|O
 30|Call of the Ancestors|Ruf der Urahnen|O|N
 30|Astral Recall|Astraler Rückruf|O
 30|Nature Resistance Totem|Totem des Naturwiderstands|O
+30|Lava Burst|Lavaeruption|D|NT
+30|Nature's Swiftness|Schnelligkeit der Natur|O|T
 32|Windfury Totem|Totem des Windzorns|O
 32|Chain Lightning|Kettenblitzschlag|D
 34|Sentry Totem|Totem des Wachens|O
 36|Windwall Totem|Totem der Windmauer|O
-38|Mana Tide Totem|Totem der Manaflut|O|N
 38|Disease Cleansing Totem|Totem der Krankheitsreinigung|O
-40|Lava Burst|Lavaeruption|D|N
 40|Chain Heal|Kettenheilung|H
 40|Call of the Spirits|Ruf der Geister|O|N
-42|Grace of Air Totem|Totem der luftgleichen Anmut|O
-50|Riptide|Springflut|H|N`,
+40|Riptide|Springflut|H|NT
+40|Elemental Mastery|Elementarbeherrschung|O|T
+40|Rage of the Farseer|Zorn des Scharfsehers|O|T
+42|Grace of Air Totem|Totem der luftgleichen Anmut|O`,
 Warrior: `1|Battle Shout|Schlachtruf|O
 1|Battle Stance|Kampfhaltung|O
 4|Charge|Sturmangriff|D
@@ -514,19 +546,25 @@ Warrior: `1|Battle Shout|Schlachtruf|O
 20|Retaliation|Gegenschlag|O
 20|Slam|Zerschmettern|M|N
 20|Cleave|Spalten|M
+20|Last Stand|Letztes Gefecht|O|T
+20|Piercing Howl|Durchdringendes Heulen|O|T
 22|Sunder Armor|Rüstung zerreißen|M
 22|Intimidating Shout|Drohruf|D
 24|Execute|Hinrichten|M
+25|Spearing Strike|Aufspießender Stoß|M|T
 26|Challenging Shout|Herausforderungsruf|O
 28|Shield Wall|Schildwall|O
 30|Berserker Rage|Berserkerwut|O
 30|Berserker Stance|Berserkerhaltung|O
+30|Concussion Blow|Erschütternder Schlag|M|T
+30|Death Wish|Todeswunsch|O|T
+30|Sweeping Strikes|Weitreichende Stöße|O|T
 36|Whirlwind|Wirbelwind|O
 38|Pummel|Zuschlagen|M
+40|Shield Slam|Schildschlag|M|T
+40|Bloodthirst|Blutdurst|M|T
+40|Mortal Strike|Tödlicher Stoß|M|T
 42|Intercept|Abfangen|D
-48|Shield Slam|Schildschlag|M
-48|Bloodthirst|Blutdurst|M
-48|Mortal Strike|Tödlicher Stoß|M
 50|Recklessness|Tollkühnheit|O`,
 Hunter: `1|Track Beasts|Wildtiere aufspüren|O
 1|Auto Shot|Automatischer Schuss|D
@@ -557,27 +595,32 @@ Hunter: `1|Track Beasts|Wildtiere aufspüren|O
 20|Aimed Shot|Gezielter Schuss|D
 20|Disengage|Rückzug|M
 20|Freezing Trap|Eiskältefalle|O
+20|Deterrence|Abschreckung|O|T
 22|Scorpid Sting|Skorpidstich|D
 24|Beast Lore|Wildtierkunde|D
 24|Track Hidden|Verborgenes aufspüren|O
+25|Counterattack|Gegenangriff|M|NT
+25|Trueshot Aura|Aura des Volltreffers|O|NT
+25|Summon Hawk|Falke beschwören|D|NT
 26|Rapid Fire|Schnellfeuer|O
 26|Track Elementals|Elementare aufspüren|O
 28|Frost Trap|Frostfalle|O
 30|Aspect of the Beast|Aspekt des Wildtiers|O|N
 30|Feign Death|Totstellen|O
-30|Counterattack|Gegenangriff|M|N
 30|Lacerate|Aufschlitzen|M|N
-32|Trueshot Aura|Aura des Volltreffers|O|N
+30|Intimidation|Einschüchterung|O|T
+30|Scatter Shot|Streuschuss|D|T
+30|Strider Kick|Streichertritt|M|T
 32|Flare|Leuchtfeuer|O
 32|Track Demons|Dämonen aufspüren|O
 34|Explosive Trap|Sprengfalle|O
-36|Summon Hawk|Falke beschwören|D|N
 36|Viper Sting|Vipernbiss|D
 40|Volley|Salve|O
 40|Aspect of the Pack|Aspekt des Rudels|O
 40|Track Giants|Riesen aufspüren|O
+40|Sniper Shot|Heckenschützenschuss|D|NT
+40|Bestial Wrath|Zorn des Wildtiers|O|T
 46|Aspect of the Wild|Aspekt der Wildnis|O
-48|Sniper Shot|Heckenschützenschuss|D|N
 50|Track Dragonkin|Drachkin aufspüren|O
 60|Tranquilizing Shot|Einlullender Schuss|D`,
 Rogue: `1|Stealth|Verstohlenheit|O
@@ -596,14 +639,27 @@ Rogue: `1|Stealth|Verstohlenheit|O
 16|Feint|Finte|M
 18|Ambush|Hinterhalt|M
 20|Rupture|Blutung|M
+20|Ghostly Strike|Geisterhafter Stoß|M|T
+20|Riposte|Riposte|M|T
+20|Instant Poison|Sofort wirkendes Gift|O
+20|Crippling Poison|Verkrüppelndes Gift|O
 22|Vanish|Verschwinden|O
 22|Distract|Ablenken|O
+24|Mind-numbing Poison|Gedankenbenebelndes Gift|O
+25|Cold Blood|Kaltblütigkeit|O|T
+25|Premeditation|Konzentration|M|T
 26|Cheap Shot|Fieser Trick|M
 30|Kidney Shot|Nierenhieb|M
 30|Disarm Trap|Falle entschärfen|O
-30|Coup de Grace|Gnadenstoß|M|N
+30|Mutilate|Verstümmeln|M|NT
+30|Blade Flurry|Klingenwirbel|O|T
+30|Hemorrhage|Blutsturz|M|T
+30|Preparation|Vorbereitung|O|T
+30|Deadly Poison|Tödliches Gift|O
+32|Wound Poison|Wundgift|O
 34|Blind|Blenden|D
-40|Mutilate|Verstümmeln|M|N`,
+40|Adrenaline Rush|Adrenalinrausch|O|T
+40|Venom|Toxin|O|T`,
 Mage: `1|Arcane Intellect|Arkane Intelligenz|H
 4|Frostbolt|Frostblitz|D
 4|Conjure Water|Wasser herbeizaubern|O
@@ -629,35 +685,38 @@ Mage: `1|Arcane Intellect|Arkane Intelligenz|H
 20|Teleport: Ironforge|Teleportieren: Ironforge|O
 20|Teleport: Orgrimmar|Teleportieren: Orgrimmar|O
 20|Teleport: Undercity|Teleportieren: Undercity|O
+20|Pyroblast|Pyroschlag|D|T
+20|Ice Lance|Eislanze|D|NT
+20|Arcane Blast|Arkanschlag|D|NT
 22|Scorch|Versengen|D
 22|Frost Ward|Frostzauberschutz|O
-24|Frost Blast|Frostschlag|D|N
-24|Pyroblast|Pyroschlag|D
 24|Counterspell|Gegenzauber|D
+25|Arcane Wrath|Arkaner Zorn|D|NT
+25|Ice Block|Eisblock|O|T
 26|Cone of Cold|Kältekegel|O
-28|Ice Lance|Eislanze|D|N
 28|Conjure Mana Agate|Manaachat herbeizaubern|O
-30|Arcane Blast|Arkanschlag|D|N
 30|Ice Armor|Eisrüstung|O
 30|Teleport: Darnassus|Teleportieren: Darnassus|O
 30|Teleport: Thunder Bluff|Teleportieren: Thunder Bluff|O
+30|Blast Wave|Druckwelle|O|T
+30|Cold Snap|Kälteeinbruch|O|T
+30|Presence of Mind|Geistesgegenwart|O|T
 34|Mage Armor|Magische Rüstung|O
-36|Arcane Wrath|Arkaner Zorn|D|N
-36|Blast Wave|Druckwelle|O
 38|Conjure Mana Jade|Manajadestein herbeizaubern|O
 40|Frostfire Bolt|Frostfeuerblitz|D|N
 40|Portal: Stormwind|Portal: Stormwind|O
 40|Portal: Ironforge|Portal: Ironforge|O
 40|Portal: Orgrimmar|Portal: Orgrimmar|O
 40|Portal: Undercity|Portal: Undercity|O
-46|Ice Barrier|Eisbarriere|O
+40|Ice Barrier|Eisbarriere|O|T
+40|Arcane Power|Arkane Macht|O|T
+40|Combustion|Verbrennung|O|T
 48|Conjure Mana Citrine|Manacitrin herbeizaubern|O
 50|Teleport: Dalaran|Teleportieren: Dalaran|O|N
 50|Portal: Darnassus|Portal: Darnassus|O
 50|Portal: Thunder Bluff|Portal: Thunder Bluff|O
 56|Arcane Brilliance|Arkane Brillanz|O
-58|Conjure Mana Ruby|Manarubin herbeizaubern|O
-60|Polymorph: Cow|Verwandlung: Kuh|D`,
+58|Conjure Mana Ruby|Manarubin herbeizaubern|O`,
 Warlock: `1|Summon Imp|Wichtel beschwören|O
 1|Immolate|Feuerbrand|D
 4|Corruption|Verderbnis|D
@@ -682,10 +741,15 @@ Warlock: `1|Summon Imp|Wichtel beschwören|O
 20|Curse of the Elements|Fluch der Elemente|D|N
 20|Demon Armor|Dämonenrüstung|O
 20|Rain of Fire|Feuerregen|O
+20|Shadowburn|Schattenbrand|D|T
+20|Amplify Curse|Fluch verstärken|O|T
+20|Demonic Sacrifice|Dämonische Opferung|O|T
 22|Eye of Kilrogg|Auge von Kilrogg|O
-24|Shadowburn|Schattenbrand|D
 24|Drain Mana|Mana entziehen|D
 24|Sense Demons|Dämonen spüren|O
+25|Conflagrate|Feuersbrunst|D|NT
+25|Curse of Exhaustion|Fluch der Erschöpfung|D|T
+25|Fel Domination|Teufelsbeherrschung|O|T
 26|Curse of Tongues|Fluch der Sprachen|D
 26|Detect Invisibility|Unsichtbarkeit entdecken|H
 28|Create Firestone|Feuerstein herstellen|O
@@ -693,15 +757,17 @@ Warlock: `1|Summon Imp|Wichtel beschwören|O
 30|Summon Felhunter|Teufelsjäger beschwören|O
 30|Hellfire|Höllenfeuer|O
 30|Subjugate Demon|Dämon unterwerfen|D
-32|Conflagrate|Feuersbrunst|D|N
+30|Siphon Life|Lebensentzug|D|T
+30|Bane of Havoc|Omen der Verwüstung|D|T
+30|Soul Link|Seelenverbindung|O|T
 32|Shadow Ward|Schattenzauberschutz|O
 36|Create Spellstone|Zauberstein herstellen|O
-38|Siphon Life|Lebensentzug|D
 40|Howl of Terror|Schreckensgeheul|O
+40|Incinerate|Verbrennen|D|NT
+40|Wrack|Zermürben|D|T
 42|Death Coil|Todesmantel|D
 48|Soul Fire|Seelenfeuer|D
 50|Inferno|Inferno|O
-50|Incinerate|Verbrennen|D|N
 60|Bane of Doom|Omen der Verdammnis|D
 60|Ritual of Doom|Ritual der Verdammnis|O`
 };
@@ -715,7 +781,7 @@ for (const [cls, text] of Object.entries(SPELL_DATA)) {
   SPELLS[cls] = text.trim().split("\n").map((line) => {
     const [lv, en, de, type, flag] = line.split("|");
     DE[en] = de;
-    return { lv: +lv, en, de, type, isNew: flag === "N" };
+    return { lv: +lv, en, de, type, isNew: (flag || "").includes("N"), isTalent: (flag || "").includes("T") };
   });
 }
 
@@ -733,7 +799,7 @@ const LIBRARY = [
   ["Gestalt verlassen und absteigen", "Druid", "Bricht den Zauber ab, verlässt die Gestalt und steigt ab.", "/stopcasting\n/cancelform\n/dismount"],
   ["Baumrinde, mit Shift Griff der Natur", "Druid", "Beide bleiben in WoW Forever in der Gestalt nutzbar. Griff der Natur ist hier ab Stufe 10 Grundzauber. Baumrinde ab Stufe 44.", "#showtooltip\n/cast [mod:shift] Nature's Grasp; Barkskin", true],
   ["Lichtblitz per Mouseover", "Paladin", "Freund unter der Maus, sonst Ziel, sonst du. Alt heilt immer dich.", "#showtooltip\n/cast [mod:alt,@player][@mouseover,help,nodead][help,nodead][@player] Flash of Light"],
-  ["Heiliger Schock auf Freund oder Feind", "Paladin", "Unter der Maus: Freund wird geheilt, Feind bekommt Schaden. Sonst dein Ziel. Ab Stufe 40.", "#showtooltip\n/cast [@mouseover,help,nodead][@mouseover,harm,nodead][] Holy Shock"],
+  ["Heiliger Schock auf Freund oder Feind", "Paladin", "Unter der Maus: Freund wird geheilt, Feind bekommt Schaden. Sonst dein Ziel. Talent ab Stufe 30.", "#showtooltip\n/cast [@mouseover,help,nodead][@mouseover,harm,nodead][] Holy Shock"],
   ["Blitzheilung per Mouseover", "Priest", "Freund unter der Maus, sonst Ziel, sonst du.", "#showtooltip\n/cast [@mouseover,help,nodead][help,nodead][@player] Flash Heal"],
   ["Schild per Mouseover", "Priest", "Schild auf den Freund unter der Maus, sonst normal.", "#showtooltip\n/cast [@mouseover,help,nodead][] Power Word: Shield"],
   ["Heilen oder Schaden mit Strg", "Priest", "Feind als Ziel: Strg wirkt Heiliges Feuer, sonst Göttliche Pein. Ohne Feind: Strg wirkt Heilen, sonst Blitzheilung.", "#showtooltip\n/cast [harm,mod:ctrl]Holy Fire;[harm]Smite;[mod:ctrl]Heal;Flash Heal"],
@@ -795,7 +861,7 @@ function tr(text) {
   return out.replace(/\u0000(\d+)\u0000/g, (m, i) => ph[+i]);
 }
 
-const optLabel = (s) => name(s.en) + " (Stufe " + s.lv + ")" + (s.isNew ? " · neu in Forever" : "");
+const optLabel = (s) => name(s.en) + " (Stufe " + s.lv + ")" + (s.isTalent ? " · Talent" : "") + (s.isNew ? " · neu in Forever" : "");
 
 function fillSelect(sel, items, empty, grouped) {
   const prev = sel.value;
@@ -902,7 +968,7 @@ function buildAny() {
     lines.push("/cast " + n);
   }
   if ($("tip").checked) lines.unshift("#showtooltip");
-  return { text: lines.join("\n"), hint: TYPE_HINT[s.type] + (s.isNew ? " Diese Fähigkeit ist neu in WoW Forever." : "") };
+  return { text: lines.join("\n"), hint: TYPE_HINT[s.type] + (s.isTalent ? " Wird über ein Talent gelernt." : "") + (s.isNew ? " Diese Fähigkeit ist neu in WoW Forever." : "") };
 }
 
 function showLen(text, lenId, noteId, btnId) {
