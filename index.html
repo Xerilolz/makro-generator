@@ -36,7 +36,8 @@ body {
   padding-block: 20px 32px;
 }
 main { max-width: 680px; margin: 0 auto; display: grid; gap: 16px; }
-header h1 { font: 700 30px/1.1 var(--display); letter-spacing: .02em; margin: 0 0 4px; text-wrap: balance; }
+header { display: grid; gap: 10px; }
+header h1 { font: 700 30px/1.1 var(--display); letter-spacing: .02em; margin: 0; text-wrap: balance; }
 header p { margin: 0; color: var(--muted); }
 .card { background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 16px; display: grid; gap: 12px; min-width: 0; }
 .card h2 { font: 700 18px/1.2 var(--display); margin: 0; letter-spacing: .04em; text-transform: uppercase; }
@@ -61,23 +62,25 @@ button {
 }
 button:disabled { opacity: .5; cursor: not-allowed; }
 button:focus-visible, select:focus-visible, input:focus-visible, .out:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.filter { display: flex; gap: 6px; flex-wrap: wrap; }
-.filter button { padding: 5px 10px; font-size: 13px; background: transparent; color: var(--fg); border: 1px solid var(--line); }
-.filter button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.seg { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.seg button { padding: 5px 10px; font-size: 13px; background: transparent; color: var(--fg); border: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.seg .lbl { font-weight: 600; margin-right: 4px; }
 .list { display: grid; gap: 8px; }
 .item { display: grid; gap: 6px; padding: 10px; border: 1px solid var(--line); border-radius: 4px; min-width: 0; }
 .item .head { display: flex; gap: 6px; flex-wrap: wrap; align-items: baseline; }
 .item strong { font-weight: 600; }
 .tag { font-size: 12px; color: var(--muted); }
+.new { font-size: 11px; font-weight: 600; color: var(--accent); border: 1px solid var(--accent); border-radius: 3px; padding: 0 4px; }
 .item .what { color: var(--muted); font-size: 13px; }
 .code { font: 12px/1.5 var(--mono); overflow-x: auto; white-space: pre; padding: 8px; background: var(--bg); border-radius: 4px; }
 .item button { padding: 6px 10px; font-size: 13px; background: transparent; color: var(--accent); border: 1px solid var(--accent); }
 .rules { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
 .tablewrap { overflow-x: auto; }
 table { border-collapse: collapse; font-variant-numeric: tabular-nums; min-width: 320px; }
-th, td { text-align: left; padding: 4px 12px 4px 0; border-bottom: 1px solid var(--line); }
+th, td { text-align: left; padding: 4px 12px 4px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
 th { font-weight: 600; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
-td:nth-child(2), td:nth-child(4) { color: var(--accent); font-family: var(--mono); padding-right: 24px; }
+td.n { color: var(--accent); font-family: var(--mono); padding-right: 24px; }
 code { font: 12.5px var(--mono); background: var(--bg); padding: 1px 4px; border-radius: 3px; }
 a { color: var(--accent); }
 footer { color: var(--muted); font-size: 12px; }
@@ -88,7 +91,12 @@ footer { color: var(--muted); font-size: 12px; }
 <main>
   <header>
     <h1>Makro-Generator WoW Forever</h1>
-    <p>Erzeugt Makros mit englischen Zaubernamen, damit sie im deutschen und englischen Client funktionieren.</p>
+    <p>Baut Makros für den deutschen oder englischen Client. Zaubernamen müssen in der Sprache deines Clients stehen, deshalb zuerst die Sprache wählen.</p>
+    <div class="seg" id="lang" role="group" aria-label="Client-Sprache">
+      <span class="lbl">Client-Sprache</span>
+      <button type="button" data-lang="de" aria-pressed="true">Deutsch</button>
+      <button type="button" data-lang="en" aria-pressed="false">English</button>
+    </div>
   </header>
 
   <section class="card" aria-labelledby="gen">
@@ -115,9 +123,9 @@ footer { color: var(--muted); font-size: 12px; }
       <legend>Extras</legend>
       <label class="opt"><input type="checkbox" id="tip" checked> <span><code>#showtooltip</code> als erste Zeile<small>Zeigt Symbol, Abklingzeit und Reichweite des gerade aktiven Zaubers. Als Makro-Symbol das Fragezeichen wählen.</small></span></label>
       <label class="opt"><input type="checkbox" id="alt"> <span>Alt gedrückt: immer dich selbst heilen<small>Alt + Taste darf dann nicht anders belegt sein.</small></span></label>
-      <label class="opt"><input type="checkbox" id="focus"> <span>Fokus als Heil-Ziel nach dem Mouseover<small>Praktisch, wenn der Tank als Fokus gesetzt ist. Funktioniert nur, wenn dein Client Fokus kennt. Im ursprünglichen Classic gab es ihn nicht.</small></span></label>
+      <label class="opt"><input type="checkbox" id="focus"> <span>Fokus als Heil-Ziel nach dem Mouseover<small>Praktisch, wenn der Tank als Fokus gesetzt ist (<code>/focus</code>).</small></span></label>
       <label class="opt"><input type="checkbox" id="attack"> <span>Automatischen Angriff starten<small>Fügt <code>/startattack [harm,nodead]</code> hinzu. Sinnvoll für Nahkämpfer, startet nur auf feindliche Ziele.</small></span></label>
-      <label class="opt"><input type="checkbox" id="self"> <span>Sonst normal heilen<small>Ohne passendes Ziel geht die Heilung auf dein freundliches Ziel oder auf dich.</small></span></label>
+      <label class="opt"><input type="checkbox" id="self"> <span>Sonst dich selbst heilen<small>Ohne passendes Ziel geht die Heilung auf dich (<code>[@player]</code>).</small></span></label>
       <label class="opt"><input type="checkbox" id="compact"> <span>Leerzeichen sparen<small>Lässt die Leerzeichen nach <code>]</code> und <code>;</code> weg. Funktioniert genauso und spart Zeichen bei langen Makros.</small></span></label>
     </fieldset>
     <textarea id="out" class="out" readonly aria-label="Erzeugtes Makro"></textarea>
@@ -127,91 +135,168 @@ footer { color: var(--muted); font-size: 12px; }
 
   <section class="card" aria-labelledby="lib">
     <h2 id="lib">Beispiel-Bibliothek</h2>
-    <p class="hint">Fertige Makros zum Kopieren, nach Klasse gefiltert.</p>
-    <div class="filter" id="filter" role="group" aria-label="Nach Klasse filtern"></div>
+    <p class="hint">Fertige Makros zum Kopieren, in der oben gewählten Client-Sprache. „Neu in Forever“ markiert Makros, die es so nur in WoW Forever gibt.</p>
+    <div class="seg" id="filter" role="group" aria-label="Nach Klasse filtern"></div>
     <div class="list" id="library"></div>
   </section>
 
   <section class="card" aria-labelledby="rules">
     <h2 id="rules">So funktionieren Makros</h2>
+
+    <h3>Wichtigster Tipp beim Leveln</h3>
+    <p>Schreib Zauber ohne Rang: <code>/cast Frostblitz</code> statt <code>/cast Frostblitz(Rang 1)</code>. Das Makro wirkt dann immer den höchsten Rang, den du kennst, auch direkt nach dem Lernen. Ein Zauber, den du direkt auf die Leiste ziehst, bleibt dagegen auf seinem Rang, bis du den neuen darüberziehst. Niedrige Ränge machen weniger Schaden und Heilung.</p>
+
+    <h3>Sprache</h3>
+    <ul class="rules">
+      <li>Zauber- und Gegenstandsnamen müssen in der Sprache deines Clients stehen. Im deutschen Client wirkt <code>/cast Arcane Shot</code> nicht, richtig ist <code>/cast Arkaner Schuss</code>.</li>
+      <li>Befehle und Bedingungen funktionieren in beiden Sprachen: <code>/cast</code> geht auch als <code>/wirken</code>, <code>[@mouseover,help,nodead]</code> bleibt gleich.</li>
+      <li>Shift + Klick auf einen Zauber im Zauberbuch schreibt den Namen in der richtigen Sprache ins Makro. Den Zusatz „(Rang X)“ danach löschen.</li>
+    </ul>
+
     <h3>Makro anlegen</h3>
     <ol class="rules">
-      <li>Gib <code>/m</code> im Chat ein, oder öffne im Hauptmenü „Makros“.</li>
-      <li>Wähle den Reiter: <strong>Allgemein</strong> gilt für alle Charaktere des Accounts, <strong>Charakterspezifisch</strong> nur für diesen. Pro Reiter gibt es 18 Plätze.</li>
-      <li>Klick auf „Neu“, gib einen Namen ein und wähle als Symbol das Fragezeichen, damit <code>#showtooltip</code> das Symbol setzt.</li>
-      <li>Füg das Makro ein. Shift + Klick auf einen Zauber im Zauberbuch schreibt seinen Namen ins Makro.</li>
+      <li>Gib <code>/macro</code> oder <code>/m</code> im Chat ein. Im Kampf lassen sich Makros nicht anlegen oder ändern.</li>
+      <li>Wähle den Reiter: <strong>Allgemein</strong> gilt für alle Charaktere des Accounts, <strong>Charakterspezifisch</strong> nur für diesen.</li>
+      <li>Klick auf „Neu“, gib einen Namen mit höchstens 16 Zeichen ein und wähle als Symbol das Fragezeichen, damit <code>#showtooltip</code> das Symbol setzt.</li>
+      <li>Füg das Makro ein oder schreib es mit Shift-Klick aus dem Zauberbuch.</li>
       <li>Speichern und das Symbol auf eine Aktionsleiste ziehen. Makros liegen auf dem Server und bleiben auch nach einer Neuinstallation erhalten.</li>
     </ol>
+
     <h3>Aufbau</h3>
     <ul class="rules">
+      <li><code>#</code> am Zeilenanfang steuert die Anzeige auf der Leiste (<code>#showtooltip</code>, <code>#show</code>). <code>/</code> leitet einen Befehl ein (<code>/cast</code>, <code>/use</code>, <code>/target</code>).</li>
       <li>Bedingungen stehen in eckigen Klammern. Alles in einer Klammer muss zutreffen: <code>[@mouseover,help,nodead]</code>.</li>
-      <li>Mehrere Klammern vor einem Zauber werden von links nach rechts geprüft, die erste passende gewinnt: <code>[@mouseover,help,nodead][] Heal</code>.</li>
-      <li>Eine leere Klammer <code>[]</code> heißt „normal wirken“.</li>
-      <li>Ein Semikolon trennt verschiedene Zauber mit eigenen Bedingungen: <code>[@mouseover,harm,nodead] Flame Shock; [] Healing Wave</code>.</li>
-      <li><code>help</code> und <code>harm</code> prüfen automatisch, ob das Ziel existiert. <code>[harm,exists]</code> ist also doppelt.</li>
+      <li>Mehrere Klammern vor einem Zauber werden von links nach rechts geprüft, die erste passende gewinnt: <code>[@mouseover,help,nodead][] Heilen</code>.</li>
+      <li>Eine leere Klammer <code>[]</code> heißt „normal auf dein Ziel wirken“.</li>
+      <li>Ein Semikolon trennt verschiedene Zauber mit eigenen Bedingungen: <code>[harm] Göttliche Pein; Blitzheilung</code>.</li>
+      <li><code>help</code>, <code>harm</code> und <code>dead</code> prüfen automatisch, ob das Ziel existiert. <code>[harm,exists]</code> ist also doppelt.</li>
       <li>Fast jede Bedingung lässt sich mit „no“ umkehren: <code>combat</code> und <code>nocombat</code>, <code>channeling</code> und <code>nochanneling</code>.</li>
-      <li>Ein Makro läuft von oben nach unten. Pro Tastendruck ist nur ein Zauber mit globaler Abklingzeit möglich. Gegenstände wie Trinkets können zusätzlich ausgelöst werden.</li>
+      <li>Ein Makro läuft von oben nach unten. Pro Tastendruck ist nur ein Zauber mit globaler Abklingzeit möglich. Trinkets, <code>/startattack</code> und Tierbefehle gehen zusätzlich.</li>
       <li>Makros, die mehrere Angriffe mit einem Klick abfeuern („One-Button-Rotation“), funktionieren deshalb nicht. Der erste Zauber blockiert den Rest, auch wenn er fehlschlägt.</li>
       <li>Ohne <code>#showtooltip</code> zeigt der Knopf Abklingzeit und Reichweite des ersten Zaubers im Makro. Mit <code>#showtooltip Zaubername</code> legst du fest, welcher Zauber angezeigt wird.</li>
-      <li>Ein Makro hat höchstens 255 Zeichen. Statt Gegenstandsnamen gehen Ausrüstungsplätze: <code>/use 13</code> und <code>/use 14</code> sind die beiden Trinkets.</li>
-      <li>Leerzeichen nach <code>]</code>, <code>;</code> und <code>,</code> sind nicht nötig. <code>[@mouseover,help,nodead]Heal;[]Smite</code> funktioniert genauso und spart Zeichen.</li>
+      <li>Ein Makro hat höchstens 255 Zeichen, Zeilenumbrüche zählen mit. Statt Gegenstandsnamen gehen Ausrüstungsplätze: <code>/use 13</code> und <code>/use 14</code> sind die beiden Schmuckstücke.</li>
+      <li>Leerzeichen nach <code>]</code>, <code>;</code> und <code>,</code> sind nicht nötig. <code>[@mouseover,help,nodead]Heilen;[]Göttliche Pein</code> funktioniert genauso und spart Zeichen.</li>
     </ul>
-    <h3>Ziele</h3>
+
+    <h3>Ziele und Bedingungen</h3>
     <ul class="rules">
-      <li><code>@mouseover</code> ist die Einheit unter dem Mauszeiger, <code>@player</code> bist du, <code>@target</code> dein Ziel, <code>@focus</code> dein Fokus, <code>@targettarget</code> das Ziel deines Ziels.</li>
+      <li><code>@mouseover</code> ist die Einheit unter dem Mauszeiger, im Gruppenfenster oder in der Welt. <code>@player</code> bist du, <code>@target</code> dein Ziel, <code>@targettarget</code> das Ziel deines Ziels.</li>
+      <li><code>@focus</code> funktioniert in WoW Forever. <code>/focus</code> setzt dein Ziel als Fokus, <code>/clearfocus</code> löscht ihn.</li>
+      <li>Rollen wie „Tank“ kann ein Makro nicht direkt anvisieren, weil das Spiel nicht festlegt, wer Tank 1 oder Tank 2 ist. Setz den Tank als Fokus und nutze <code>@focus</code>.</li>
       <li>Modifikatoren: <code>[mod:shift]</code>, <code>[mod:ctrl]</code>, <code>[mod:alt]</code>, beide zusammen mit <code>[mod:ctrlalt]</code>, keine Taste mit <code>[nomod]</code>. Die Tastenkombination darf dann nicht anders belegt sein.</li>
       <li>Maustasten: <code>[btn:2]</code> ist Rechtsklick, <code>[btn:3]</code> die mittlere Taste, <code>[btn:4]</code> und <code>[btn:5]</code> die Seitentasten.</li>
-      <li><code>@focus</code> und <code>/focus</code> gab es im ursprünglichen Classic nicht. Teste vor dem Launch, ob WoW Forever den Fokus unterstützt.</li>
-      <li>Rollen wie „Tank“ kann ein Makro nicht direkt anvisieren, weil das Spiel nicht festlegt, wer Tank 1 oder Tank 2 ist. Setz den Tank als Fokus und nutze <code>@focus</code>.</li>
+      <li>Umgebung: <code>[combat]</code>, <code>[mounted]</code>, <code>[swimming]</code>, <code>[outdoors]</code>, <code>[channeling]</code>.</li>
+      <li>Ausrüstung: <code>[worn:Typ]</code> prüft die angelegte Waffenart. Der Typ steht in der Client-Sprache.</li>
+      <li>Haltung und Gestalt: <code>[stance:N]</code> und <code>[form:N]</code> bedeuten dasselbe. Gezählt wird von links auf der Haltungsleiste, <code>0</code> heißt keine.</li>
     </ul>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Nr.</th><th>Krieger</th><th>Druide (alle Gestalten gelernt)</th><th>Andere</th></tr></thead>
+        <tbody>
+          <tr><td class="n">1</td><td>Kampfhaltung</td><td>Bär / Terrorbär</td><td>Schurke: Verstohlenheit, Priester: Schattengestalt, Schamane: Geisterwolf</td></tr>
+          <tr><td class="n">2</td><td>Verteidigungshaltung</td><td>Wassergestalt</td><td></td></tr>
+          <tr><td class="n">3</td><td>Berserkerhaltung</td><td>Katze</td><td></td></tr>
+          <tr><td class="n">4</td><td></td><td>Reisegestalt</td><td></td></tr>
+          <tr><td class="n">5</td><td></td><td>Moonkin</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="hint">Beim Druiden hängen die Nummern davon ab, welche Gestalten du schon hast. Ohne Wassergestalt ist die Katze Nummer 2. Ein <code>!</code> vor dem Namen, z. B. <code>/cast !Katzengestalt</code>, verhindert, dass ein zweiter Druck die Gestalt wieder verlässt.</p>
+
     <h3>Was ein Makro nicht kann</h3>
-    <p>Makros sehen keine Abklingzeiten, kein Leben, keine Buffs oder Debuffs und nicht, ob das Ziel gerade zaubert. Sie treffen keine Entscheidungen für dich. Tricks, die das umgehen, gelten als Ausnutzen und sollten nicht verwendet werden.</p>
+    <p>Makros sehen keine Abklingzeiten, kein Leben, keine Buffs oder Debuffs und nicht, ob das Ziel gerade zaubert. Sie warten nicht zwischen Zeilen und treffen keine Entscheidungen für dich. Tricks, die das umgehen, gelten als Ausnutzen und sollten nicht verwendet werden.</p>
+
     <h3>Nützliche Befehle</h3>
     <ul class="rules">
       <li><code>/cast</code> für Zauber, <code>/use</code> für Gegenstände</li>
-      <li><code>/stopcasting</code> bricht den laufenden Zauber ab</li>
-      <li><code>/cancelaura Name</code> entfernt einen eigenen Buff</li>
-      <li><code>/equip Name</code> legt einen Gegenstand an, im Kampf nur Waffen</li>
-      <li><code>/petattack</code>, <code>/petfollow</code>, <code>/petpassive</code>, <code>/petdefensive</code> steuern das Tier</li>
-      <li><code>/focus [@mouseover,exists]</code> setzt den Fokus auf die Einheit unter der Maus</li>
       <li><code>/startattack</code> und <code>/stopattack</code> starten und stoppen den automatischen Angriff</li>
+      <li><code>/stopcasting</code> bricht den laufenden Zauber ab, z. B. vor einem Unterbrecher</li>
       <li><code>/cancelform</code> verlässt Gestalt oder Form, <code>/dismount</code> steigt vom Reittier</li>
-      <li><code>/equipslot 14 Name</code> legt einen Gegenstand in einen bestimmten Platz</li>
-      <li><code>/petstay</code> lässt das Tier warten, <code>/petautocaston Name</code> und <code>/petautocastoff Name</code> schalten Tier-Zauber automatisch an und aus</li>
-      <li><code>/target Name</code> wählt eine Einheit nach Namen als Ziel</li>
-      <li><code>/castsequence reset=target A, B, C</code> wirkt Zauber der Reihe nach. Schlägt ein Zauber fehl, bleibt die Folge stehen. Im Kampf deshalb meist ungünstig.</li>
+      <li><code>/cancelaura Name</code> entfernt einen eigenen Buff</li>
+      <li><code>/equip Name</code> legt einen Gegenstand an, <code>/equipslot 14 Name</code> in einen bestimmten Platz. Im Kampf nur Waffen.</li>
+      <li><code>/petattack</code>, <code>/petfollow</code>, <code>/petstay</code>, <code>/petpassive</code>, <code>/petdefensive</code> steuern das Tier, <code>/petautocaston Name</code> und <code>/petautocastoff Name</code> schalten Tier-Zauber automatisch an und aus</li>
+      <li><code>/target Name</code> wählt eine Einheit nach Namen, <code>/focus [@mouseover,exists]</code> setzt den Fokus auf die Einheit unter der Maus</li>
+      <li><code>/castsequence reset=10/target A, B</code> wirkt Zauber der Reihe nach. Schlägt ein Zauber fehl, bleibt die Folge stehen. Im Kampf deshalb meist ungünstig.</li>
       <li><code>/stopmacro</code> stoppt alle folgenden Zeilen</li>
       <li>Zeilen ohne <code>/</code> gehen als Text in den Chat. <code>/s</code>, <code>/p</code> oder <code>/g</code> leiten sie gezielt weiter.</li>
     </ul>
+
+    <h3>Besonderheiten in WoW Forever</h3>
+    <ul class="rules">
+      <li>Seit dem 16.10. löst eine Schriftrolle die globale Abklingzeit aus. Schriftrolle und Zauber auf einem Tastendruck geht nicht mehr.</li>
+      <li>Seit dem 08.10. kann <code>/equipslot</code> mehrere Waffen innerhalb einer globalen Abklingzeit wechseln.</li>
+      <li><code>/cc</code> öffnet das Klick-Heilen für Gruppen- und Schlachtzugsfenster. Das ersetzt viele Mouseover-Makros.</li>
+      <li><code>/run</code>-Skripte unterliegen denselben Einschränkungen wie Addons und sehen im Kampf nicht alles.</li>
+      <li>Noch nicht bestätigt: die Zahl der Makro-Plätze und ob Einschränkungen aus Retail übernommen werden.</li>
+    </ul>
+
     <h3>Ausrüstungsplätze für <code>/use</code></h3>
     <div class="tablewrap">
       <table>
         <thead><tr><th>Platz</th><th>Nr.</th><th>Platz</th><th>Nr.</th></tr></thead>
         <tbody>
-          <tr><td>Kopf</td><td>1</td><td>Handgelenke</td><td>9</td></tr>
-          <tr><td>Hals</td><td>2</td><td>Hände</td><td>10</td></tr>
-          <tr><td>Schultern</td><td>3</td><td>Ring 1</td><td>11</td></tr>
-          <tr><td>Hemd</td><td>4</td><td>Ring 2</td><td>12</td></tr>
-          <tr><td>Brust</td><td>5</td><td>Schmuck 1</td><td>13</td></tr>
-          <tr><td>Taille</td><td>6</td><td>Schmuck 2</td><td>14</td></tr>
-          <tr><td>Beine</td><td>7</td><td>Rücken</td><td>15</td></tr>
-          <tr><td>Füße</td><td>8</td><td>Haupthand</td><td>16</td></tr>
-          <tr><td>Munition</td><td>0</td><td>Nebenhand</td><td>17</td></tr>
+          <tr><td>Kopf</td><td class="n">1</td><td>Handgelenke</td><td class="n">9</td></tr>
+          <tr><td>Hals</td><td class="n">2</td><td>Hände</td><td class="n">10</td></tr>
+          <tr><td>Schultern</td><td class="n">3</td><td>Ring 1</td><td class="n">11</td></tr>
+          <tr><td>Hemd</td><td class="n">4</td><td>Ring 2</td><td class="n">12</td></tr>
+          <tr><td>Brust</td><td class="n">5</td><td>Schmuck 1</td><td class="n">13</td></tr>
+          <tr><td>Taille</td><td class="n">6</td><td>Schmuck 2</td><td class="n">14</td></tr>
+          <tr><td>Beine</td><td class="n">7</td><td>Rücken</td><td class="n">15</td></tr>
+          <tr><td>Füße</td><td class="n">8</td><td>Haupthand</td><td class="n">16</td></tr>
+          <tr><td>Munition</td><td class="n">0</td><td>Nebenhand</td><td class="n">17</td></tr>
         </tbody>
       </table>
     </div>
-    <p class="hint">Vollständige Listen: <a href="https://warcraft.wiki.gg/wiki/Macro_conditionals" target="_blank" rel="noopener">Bedingungen</a> und <a href="https://warcraft.wiki.gg/wiki/Macro_commands" target="_blank" rel="noopener">Befehle</a> auf warcraft.wiki.gg. Grundlagen: <a href="https://www.reddit.com/r/wownoob/s/xZOMpRWB1n" target="_blank" rel="noopener">Makro-Leitfaden auf r/wownoob</a>, <a href="https://www.wowisclassic.com/en/guide/how-to-make-macros/" target="_blank" rel="noopener">How to make macros (WoWisClassic)</a> und <a href="https://marvolomania.de/makros-in-world-of-warcraft-alles-was-du-wissen-musst/" target="_blank" rel="noopener">Makros in World of Warcraft (Marvolomania)</a>.</p>
+
+    <h3>Quellen</h3>
+    <ul class="rules">
+      <li><a href="https://mmonster.co/de/wow-forever/guides/macros" target="_blank" rel="noopener">WoW Forever Makros (mmonster)</a>: Sprache, Fokus, Ränge, Forever-Besonderheiten</li>
+      <li><a href="https://www.wowhead.com/forever/guide/beginners-guide-to-writing-macros-in-wow-forever-34950" target="_blank" rel="noopener">Beginners Guide to Writing Macros in WoW Forever (Wowhead)</a>: Ränge, Haltungen, Beispiele</li>
+      <li><a href="https://classicwowforever.com/macros/" target="_blank" rel="noopener">Macros (Classic WoW Forever)</a>: Makros je Klasse</li>
+      <li><a href="https://www.wowisclassic.com/en/guide/how-to-make-macros/" target="_blank" rel="noopener">How to make macros (WoWisClassic)</a></li>
+      <li><a href="https://www.reddit.com/r/wownoob/s/xZOMpRWB1n" target="_blank" rel="noopener">Makro-Leitfaden auf r/wownoob</a></li>
+      <li><a href="https://marvolomania.de/makros-in-world-of-warcraft-alles-was-du-wissen-musst/" target="_blank" rel="noopener">Makros in World of Warcraft (Marvolomania)</a></li>
+      <li>Vollständige Listen: <a href="https://warcraft.wiki.gg/wiki/Macro_conditionals" target="_blank" rel="noopener">Bedingungen</a> und <a href="https://warcraft.wiki.gg/wiki/Macro_commands" target="_blank" rel="noopener">Befehle</a> auf warcraft.wiki.gg</li>
+    </ul>
   </section>
 
-  <footer>Zaubernamen sind englische Classic-Namen. Ist ein Zauber noch nicht gelernt, passiert beim Drücken nichts. Vor dem Launch im Zauberbuch prüfen.</footer>
+  <footer>Stand: Beta-Client 1.60.1. Die Makros sind im Live-Client noch nicht getestet. Ist ein Zauber noch nicht gelernt, passiert beim Drücken nichts. Weicht ein deutscher Name ab, per Shift-Klick aus dem Zauberbuch übernehmen.</footer>
 </main>
 
 <script>
-// Spell lists per class, English client names.
+// English to German spell names (Classic client). Commands and conditionals stay as they are.
+const DE = {
+  "Healing Touch": "Heilende Berührung", "Regrowth": "Nachwachsen", "Rejuvenation": "Verjüngung",
+  "Wrath": "Zorn", "Moonfire": "Mondfeuer", "Insect Swarm": "Insektenschwarm", "Entangling Roots": "Wucherwurzeln",
+  "Faerie Fire": "Feenfeuer", "Innervate": "Anregen", "Bear Form": "Bärengestalt", "Dire Bear Form": "Terrorbärengestalt",
+  "Cat Form": "Katzengestalt", "Aquatic Form": "Wassergestalt", "Travel Form": "Reisegestalt", "Dash": "Spurt",
+  "Mark of the Wild": "Mal der Wildnis", "Gift of the Wild": "Gabe der Wildnis", "Thorns": "Dornen",
+  "Remove Curse": "Fluch aufheben", "Rebirth": "Wiedergeburt", "Revive": "Wiederbeleben",
+  "Barkskin": "Baumrinde", "Nature's Grasp": "Griff der Natur",
+  "Holy Light": "Heiliges Licht", "Flash of Light": "Lichtblitz", "Holy Shock": "Heiliger Schock",
+  "Judgement": "Richturteil", "Hammer of Justice": "Hammer der Gerechtigkeit",
+  "Heal": "Heilen", "Flash Heal": "Blitzheilung", "Lesser Heal": "Geringes Heilen", "Renew": "Erneuerung",
+  "Power Word: Shield": "Machtwort: Schild", "Shadow Word: Pain": "Schattenwort: Schmerz", "Smite": "Göttliche Pein",
+  "Mind Blast": "Gedankenschlag", "Mind Flay": "Gedankenschinden", "Holy Fire": "Heiliges Feuer",
+  "Healing Wave": "Welle der Heilung", "Lesser Healing Wave": "Geringe Welle der Heilung", "Chain Heal": "Kettenheilung",
+  "Lightning Bolt": "Blitzschlag", "Flame Shock": "Flammenschock", "Earth Shock": "Erdschock", "Frost Shock": "Frostschock",
+  "Heroic Strike": "Heldenhafter Stoß", "Charge": "Sturmangriff", "Taunt": "Spott", "Pummel": "Zuschlagen",
+  "Shield Bash": "Schildhieb", "Battle Stance": "Kampfhaltung", "Defensive Stance": "Verteidigungshaltung", "Execute": "Hinrichten",
+  "Arcane Shot": "Arkaner Schuss", "Serpent Sting": "Schlangenbiss", "Hunter's Mark": "Mal des Jägers",
+  "Concussive Shot": "Erschütternder Schuss", "Aspect of the Cheetah": "Aspekt des Geparden", "Feign Death": "Totstellen",
+  "Brown Ram": "Brauner Widder",
+  "Sinister Strike": "Finsterer Stoß", "Backstab": "Meucheln", "Kick": "Tritt", "Sap": "Kopfnuss", "Gouge": "Solarplexus",
+  "Stealth": "Verstohlenheit",
+  "Fireball": "Feuerball", "Frostbolt": "Frostblitz", "Counterspell": "Gegenzauber", "Polymorph": "Verwandlung",
+  "Fire Blast": "Feuerschlag",
+  "Shadow Bolt": "Schattenblitz", "Corruption": "Verderbnis", "Immolate": "Feuerbrand", "Curse of Agony": "Fluch der Pein",
+  "Fear": "Furcht"
+};
+
 const CLASSES = {
   Druid:   { de: "Druide",       heal: ["Healing Touch", "Regrowth", "Rejuvenation"], harm: ["Wrath", "Moonfire", "Insect Swarm", "Entangling Roots", "Faerie Fire"] },
-  Paladin: { de: "Paladin",      heal: ["Holy Light", "Flash of Light", "Holy Shock"], harm: ["Judgement", "Holy Shock", "Hammer of Justice"] },
-  Priest:  { de: "Priester",     heal: ["Heal", "Flash Heal", "Lesser Heal", "Renew", "Power Word: Shield"], harm: ["Shadow Word: Pain", "Smite", "Mind Blast", "Mind Flay"] },
+  Paladin: { de: "Paladin",      heal: ["Flash of Light", "Holy Light", "Holy Shock"], harm: ["Judgement", "Holy Shock", "Hammer of Justice"] },
+  Priest:  { de: "Priester",     heal: ["Flash Heal", "Heal", "Lesser Heal", "Renew", "Power Word: Shield"], harm: ["Smite", "Shadow Word: Pain", "Mind Blast", "Mind Flay"] },
   Shaman:  { de: "Schamane",     heal: ["Healing Wave", "Lesser Healing Wave", "Chain Heal"], harm: ["Lightning Bolt", "Flame Shock", "Earth Shock", "Frost Shock"] },
   Warrior: { de: "Krieger",      heal: [], harm: ["Heroic Strike", "Charge", "Taunt", "Pummel", "Shield Bash"] },
   Hunter:  { de: "Jäger",        heal: [], harm: ["Arcane Shot", "Serpent Sting", "Hunter's Mark", "Concussive Shot"] },
@@ -220,38 +305,72 @@ const CLASSES = {
   Warlock: { de: "Hexenmeister", heal: [], harm: ["Shadow Bolt", "Corruption", "Immolate", "Curse of Agony", "Fear"] }
 };
 
-// Library: [title, class key or "Alle", what it does, macro text]
+// Library: [title, class key or "Alle", what it does, macro in English, new in Forever?]
 const LIBRARY = [
   ["Freund per Maus heilen, sonst Feind-Ziel", "Druid", "Dein Haupt-Makro für Heilen und Schaden auf einer Taste.", "#showtooltip\n/cast [@mouseover,help,nodead][help,nodead] Healing Touch; [harm,nodead] Wrath"],
-  ["Formen ohne Rückwechsel", "Druid", "Wechselt in Bärengestalt und bleibt drin, auch bei doppeltem Drücken.", "#showtooltip\n/cast [noform:1] Bear Form"],
-  ["Anregen auf den Heiler", "Druid", "Freund unter der Maus, sonst Ziel.", "#showtooltip\n/cast [@mouseover,help,nodead][] Innervate"],
-  ["Notheilung aus der Tiergestalt", "Druid", "Verlässt Bär oder Katze und heilt dich sofort.", "#showtooltip Regrowth\n/cancelform\n/cast [@player] Regrowth"],
-  ["Heilen per Mouseover", "Paladin", "Freund unter der Maus, sonst Ziel, Alt heilt dich selbst.", "#showtooltip\n/cast [mod:alt,@player][@mouseover,help,nodead][] Holy Light"],
+  ["Heilen aus jeder Gestalt", "Druid", "Verlässt die Gestalt und heilt den Freund unter der Maus, sonst dich. Mit Shift Nachwachsen statt Heilende Berührung.", "#showtooltip Healing Touch\n/cancelform\n/cast [mod:shift,@mouseover,help,nodead][mod:shift,@player] Regrowth; [@mouseover,help,nodead][@player] Healing Touch"],
+  ["Katze oder Bär auf einer Taste", "Druid", "Steigt ab und wechselt in Katzengestalt, mit Shift in Bärengestalt.", "#showtooltip [mod:shift] Bear Form; Cat Form\n/dismount\n/cast [mod:shift] Bear Form; Cat Form"],
+  ["Katze, dann Spurt", "Druid", "Erster Druck: Katzengestalt. In Katzengestalt: Spurt. Die 3 gilt, wenn du Bär und Wassergestalt schon hast, sonst 2.", "#showtooltip\n/cast [noform:3] !Cat Form\n/cast [form:3] Dash"],
+  ["Gestalt bleibt aktiv", "Druid", "Das Ausrufezeichen verhindert, dass ein zweiter Druck die Bärengestalt wieder verlässt.", "#showtooltip\n/cast !Bear Form"],
+  ["Buffs auf einer Taste", "Druid", "Verlässt die Gestalt. Erster Druck Mal der Wildnis, zweiter Dornen, nach 10 Sekunden oder neuem Ziel von vorn. Mit Shift Gabe der Wildnis.", "/cancelform\n/cast [mod:shift] Gift of the Wild\n/castsequence reset=10/target Mark of the Wild, Thorns"],
+  ["Wiedergeburt im Kampf, sonst Wiederbeleben", "Druid", "Auf den toten Spieler unter der Maus oder dein Ziel.", "#showtooltip [combat] Rebirth; Revive\n/cast [@mouseover,help,dead,combat][help,dead,combat] Rebirth\n/cast [@mouseover,help,dead,nocombat][help,dead,nocombat] Revive"],
+  ["Fluch aufheben per Mouseover", "Druid", "Freund unter der Maus, sonst Ziel, sonst du.", "#showtooltip\n/cast [@mouseover,help,nodead][help,nodead][@player] Remove Curse"],
+  ["Anregen auf den Heiler", "Druid", "Verlässt die Gestalt. Freund unter der Maus, sonst Ziel, sonst du. Ab Stufe 40.", "#showtooltip\n/cancelform\n/cast [@mouseover,help,nodead][help,nodead][@player] Innervate"],
+  ["Gestalt verlassen und absteigen", "Druid", "Bricht den Zauber ab, verlässt die Gestalt und steigt ab.", "/stopcasting\n/cancelform\n/dismount"],
+  ["Baumrinde, mit Shift Griff der Natur", "Druid", "Beide bleiben in WoW Forever in der Gestalt nutzbar. Griff der Natur ist hier ab Stufe 10 Grundzauber. Baumrinde ab Stufe 44.", "#showtooltip\n/cast [mod:shift] Nature's Grasp; Barkskin", true],
+  ["Lichtblitz per Mouseover", "Paladin", "Freund unter der Maus, sonst Ziel, sonst du. Alt heilt immer dich.", "#showtooltip\n/cast [mod:alt,@player][@mouseover,help,nodead][help,nodead][@player] Flash of Light"],
+  ["Blitzheilung per Mouseover", "Priest", "Freund unter der Maus, sonst Ziel, sonst du.", "#showtooltip\n/cast [@mouseover,help,nodead][help,nodead][@player] Flash Heal"],
   ["Schild per Mouseover", "Priest", "Schild auf den Freund unter der Maus, sonst normal.", "#showtooltip\n/cast [@mouseover,help,nodead][] Power Word: Shield"],
-  ["Heilen oder Schaden mit Strg", "Priest", "Feind als Ziel: Strg wirkt Heiliges Feuer, sonst Göttliche Pein. Ohne Feind: Strg wirkt Heilung, sonst Blitzheilung.", "#showtooltip\n/cast [harm,mod:ctrl]Holy Fire;[harm]Smite;[mod:ctrl]Heal;Flash Heal"],
+  ["Heilen oder Schaden mit Strg", "Priest", "Feind als Ziel: Strg wirkt Heiliges Feuer, sonst Göttliche Pein. Ohne Feind: Strg wirkt Heilen, sonst Blitzheilung.", "#showtooltip\n/cast [harm,mod:ctrl]Holy Fire;[harm]Smite;[mod:ctrl]Heal;Flash Heal"],
   ["Gedankenschinden ohne Abbruch", "Priest", "Wirkt nur, wenn du nicht schon kanalisierst. Braucht den Zaubernamen hinter #showtooltip.", "#showtooltip Mind Flay\n/cast [nochanneling] Mind Flay"],
+  ["Welle der Heilung per Mouseover", "Shaman", "Freund unter der Maus, sonst Ziel, sonst du.", "#showtooltip\n/cast [@mouseover,help,nodead][help,nodead][@player] Healing Wave"],
   ["Flammenschock oder Heilung", "Shaman", "Feind unter der Maus bekommt Flammenschock, sonst Heilung auf den Freund unter der Maus oder normal.", "#showtooltip\n/cast [@mouseover,harm,nodead] Flame Shock; [@mouseover,help,nodead][] Healing Wave"],
-  ["Heilwelle mit Shift", "Shaman", "Shift wirkt Geringe Welle der Heilung, ohne Taste Kettenheilung.", "#showtooltip\n/cast [mod:shift] Lesser Healing Wave; [nomod] Chain Heal"],
+  ["Unterbrechen mit Erdschock", "Shaman", "Bricht den eigenen Zauber ab und wirkt sofort Erdschock.", "#showtooltip Earth Shock\n/stopcasting\n/cast Earth Shock"],
+  ["Heilwelle mit Shift", "Shaman", "Shift wirkt Geringe Welle der Heilung, ohne Taste Kettenheilung (ab Stufe 40).", "#showtooltip\n/cast [mod:shift] Lesser Healing Wave; [nomod] Chain Heal"],
+  ["Haltung wechseln", "Warrior", "Wechselt zwischen Kampf- und Verteidigungshaltung.", "#showtooltip\n/cast [stance:1] Defensive Stance; [stance:2] Battle Stance"],
+  ["Sturmangriff, Hinrichten oder Spott", "Warrior", "Außerhalb des Kampfes Sturmangriff. Im Kampf Hinrichten in Kampfhaltung, Spott in Verteidigungshaltung. Passt zum Makro „Haltung wechseln“.", "#showtooltip\n/cast [nocombat] Charge\n/cast [stance:1] Execute; [stance:2] Taunt"],
   ["Absitzen und Sturmangriff", "Warrior", "Steigt ab, wechselt in Kampfhaltung und stürmt los.", "#showtooltip Charge\n/dismount\n/cast Battle Stance\n/cast Charge"],
   ["Zuschlagen per Mouseover", "Warrior", "Unterbricht den Feind unter der Maus, sonst dein Ziel.", "#showtooltip\n/cast [@mouseover,harm,nodead][] Pummel"],
-  ["Tier angreifen lassen", "Hunter", "Schickt das Tier auf dein Ziel und schießt.", "#showtooltip Arcane Shot\n/petattack\n/cast Arcane Shot"],
-  ["Aspekt im Kampf, sonst Reittier", "Hunter", "Im Kampf Aspekt des Geparden, sonst Reittier. Reittier-Namen durch deinen ersetzen.", "#showtooltip\n/use [combat]Aspect of the Cheetah;Brown Ram"],
+  ["Arkaner Schuss mit Tier", "Hunter", "Schickt das Tier auf dein Ziel und schießt.", "#showtooltip Arcane Shot\n/petattack\n/cast Arcane Shot"],
+  ["Totstellen, mit Strg Tier zurück", "Hunter", "Totstellen. Mit Strg folgt dir das Tier zusätzlich.", "#showtooltip Feign Death\n/petfollow [mod:ctrl]\n/cast Feign Death"],
+  ["Aspekt im Kampf, sonst Reittier", "Hunter", "Im Kampf Aspekt des Geparden, sonst Reittier. Reittier-Namen durch deinen ersetzen.", "#showtooltip\n/use [combat] Aspect of the Cheetah; Brown Ram"],
   ["Angriff mit Auto-Attacke", "Rogue", "Startet den automatischen Angriff und wirkt Finsterer Stoß.", "#showtooltip\n/startattack\n/cast Sinister Strike"],
   ["Tritt per Mouseover", "Rogue", "Unterbricht den Feind unter der Maus, sonst dein Ziel.", "#showtooltip\n/cast [@mouseover,harm,nodead][] Kick"],
   ["Verstohlenheit nur außerhalb des Kampfes", "Rogue", "Verhindert versehentliches Drücken im Kampf.", "#showtooltip\n/cast [nocombat] Stealth"],
-  ["Gegenzauber per Mouseover", "Mage", "Unterbricht den Feind unter der Maus, sonst dein Ziel.", "#showtooltip\n/cast [@mouseover,harm,nodead][] Counterspell"],
-  ["Verwandlung per Mouseover", "Mage", "Schaf auf den Feind unter der Maus, ohne das Ziel zu wechseln.", "#showtooltip\n/cast [@mouseover,harm,nodead][] Polymorph"],
+  ["Gegenzauber sofort", "Mage", "Bricht den eigenen Zauber ab und unterbricht den Feind unter der Maus, sonst dein Ziel.", "#showtooltip Counterspell\n/stopcasting\n/cast [@mouseover,harm,nodead][] Counterspell"],
+  ["Verwandlung auf den Fokus", "Mage", "Schaf auf den Fokus, wenn er ein lebender Feind ist, sonst auf dein Ziel.", "#showtooltip\n/cast [@focus,harm,nodead][] Polymorph"],
   ["Tier und Schattenblitz", "Warlock", "Schickt den Dämon los und wirkt Schattenblitz.", "#showtooltip Shadow Bolt\n/petattack\n/cast Shadow Bolt"],
+  ["Furcht auf den Fokus", "Warlock", "Furcht auf den Fokus, wenn er ein lebender Feind ist, sonst auf dein Ziel.", "#showtooltip\n/cast [@focus,harm,nodead][] Fear"],
   ["DoTs der Reihe nach", "Warlock", "Jeder Druck wirkt den nächsten Zauber, neues Ziel startet von vorn. Schlägt ein Zauber fehl, bleibt die Folge stehen, deshalb nicht im Dauerfeuer drücken.", "#showtooltip\n/castsequence reset=target Immolate, Corruption, Curse of Agony"],
-  ["Fokus per Maus setzen", "Alle", "Setzt den Fokus auf die Einheit unter dem Mauszeiger. Nur, wenn dein Client Fokus unterstützt.", "/focus [@mouseover,exists]"],
-  ["Trinket mit Angriff", "Alle", "Löst das untere Trinket aus und wirkt danach den Zauber. Zauber an deine Klasse anpassen.", "#showtooltip Fireball\n/use 14\n/cast Fireball"],
+  ["Fokus per Maus setzen", "Alle", "Setzt den Fokus auf die Einheit unter dem Mauszeiger, z. B. den Tank.", "/focus [@mouseover,exists]"],
+  ["Fokus löschen", "Alle", "Entfernt den Fokus.", "/clearfocus"],
+  ["Schmuckstück mit Hauptzauber", "Alle", "Löst das obere Schmuckstück aus und wirkt danach den Zauber. Zauber an deine Klasse anpassen.", "#showtooltip Fireball\n/use 13\n/cast Fireball"],
   ["Zauber abbrechen", "Alle", "Bricht den laufenden Zauber ab, z. B. für einen Unterbrecher.", "/stopcasting"]
 ];
 
 const $ = (id) => document.getElementById(id);
+let lang = "de";
 let libFilter = "Alle";
+try { const s = localStorage.getItem("makro-lang"); if (s === "de" || s === "en") lang = s; } catch (_) {}
+
+const name = (en) => (lang === "de" && DE[en]) ? DE[en] : en;
+const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const KEYS = Object.keys(DE).sort((a, b) => b.length - a.length);
+
+// Swaps whole spell names only; longer names first, placeholders stop double replacement.
+function tr(text) {
+  if (lang !== "de") return text;
+  const ph = [];
+  let out = text;
+  for (const k of KEYS) {
+    const re = new RegExp("(^|[\\]\\s;,!])" + esc(k) + "(?=$|[;,\\n])", "gm");
+    out = out.replace(re, (m, p) => { ph.push(DE[k]); return p + "\u0000" + (ph.length - 1) + "\u0000"; });
+  }
+  return out.replace(/\u0000(\d+)\u0000/g, (m, i) => ph[+i]);
+}
 
 function fillSelect(sel, items, empty) {
+  const prev = sel.value;
   sel.innerHTML = "";
   if (!items.length) {
     const o = document.createElement("option");
@@ -261,8 +380,9 @@ function fillSelect(sel, items, empty) {
   sel.disabled = false;
   for (const it of items) {
     const o = document.createElement("option");
-    o.value = it; o.textContent = it; sel.appendChild(o);
+    o.value = it; o.textContent = name(it); sel.appendChild(o);
   }
+  if (items.includes(prev)) sel.value = prev;
 }
 
 function refreshSpells() {
@@ -273,7 +393,8 @@ function refreshSpells() {
 
 // Builds clauses, then joins neighbours with the same spell into one bracket chain.
 function buildMacro() {
-  const h = $("heal").value, x = $("harm").value;
+  const h = $("heal").value ? name($("heal").value) : "";
+  const x = $("harm").value ? name($("harm").value) : "";
   const mode = document.querySelector('input[name="mode"]:checked').value;
   const alt = $("alt").checked, focus = $("focus").checked, self = $("self").checked;
   const c = [];
@@ -284,18 +405,18 @@ function buildMacro() {
     if (focus) add("[@focus,help,nodead]", h);
   };
   if (mode === "heal") {
-    healFront(); add("[help,nodead]", h); if (self) add("[]", h);
+    healFront(); add("[help,nodead]", h); if (self) add("[@player]", h);
   } else if (mode === "harm") {
     add("[@mouseover,harm,nodead]", x); add("[harm,nodead]", x);
   } else if (mode === "target") {
-    healFront(); add("[help,nodead]", h); add("[harm,nodead]", x); if (self) add("[]", h);
+    healFront(); add("[help,nodead]", h); add("[harm,nodead]", x); if (self) add("[@player]", h);
   } else {
     if (alt) add("[mod:alt,@player]", h);
     add("[@mouseover,help,nodead]", h);
     add("[@mouseover,harm,nodead]", x);
     if (focus) add("[@focus,help,nodead]", h);
     add("[help,nodead]", h); add("[harm,nodead]", x);
-    if (self) add("[]", h);
+    if (self) add("[@player]", h);
   }
   if (!c.length) return "";
   const groups = [];
@@ -337,11 +458,14 @@ async function copyText(text, btn) {
   setTimeout(() => { btn.textContent = label; }, 1600);
 }
 
+function renderLang() {
+  document.querySelectorAll("#lang button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+}
+
 function renderFilter() {
   const wrap = $("filter");
   wrap.innerHTML = "";
-  const keys = ["Alle", ...Object.keys(CLASSES)];
-  for (const k of keys) {
+  for (const k of ["Alle", ...Object.keys(CLASSES)]) {
     const b = document.createElement("button");
     b.type = "button";
     b.textContent = k === "Alle" ? "Alle" : CLASSES[k].de;
@@ -355,7 +479,8 @@ function renderLibrary() {
   const wrap = $("library");
   wrap.innerHTML = "";
   const items = LIBRARY.filter(([, cls]) => libFilter === "Alle" || cls === libFilter || cls === "Alle");
-  for (const [title, cls, what, text] of items) {
+  for (const [title, cls, what, en, isNew] of items) {
+    const text = tr(en);
     const box = document.createElement("div");
     box.className = "item";
     const head = document.createElement("div");
@@ -363,6 +488,7 @@ function renderLibrary() {
     const s = document.createElement("strong"); s.textContent = title;
     const t = document.createElement("span"); t.className = "tag"; t.textContent = cls === "Alle" ? "Alle Klassen" : CLASSES[cls].de;
     head.append(s, t);
+    if (isNew) { const n = document.createElement("span"); n.className = "new"; n.textContent = "Neu in Forever"; head.append(n); }
     const w = document.createElement("div"); w.className = "what"; w.textContent = what;
     const code = document.createElement("div"); code.className = "code"; code.textContent = text;
     const btn = document.createElement("button");
@@ -373,6 +499,12 @@ function renderLibrary() {
   }
 }
 
+function setLang(l) {
+  lang = l;
+  try { localStorage.setItem("makro-lang", l); } catch (_) {}
+  renderLang(); refreshSpells(); update(); renderLibrary();
+}
+
 function init() {
   const sel = $("cls");
   for (const [key, v] of Object.entries(CLASSES)) {
@@ -380,12 +512,14 @@ function init() {
     o.value = key; o.textContent = v.de; sel.appendChild(o);
   }
   sel.value = "Druid";
-  refreshSpells();
+  document.querySelectorAll("#lang button").forEach((b) => b.addEventListener("click", () => setLang(b.dataset.lang)));
   sel.addEventListener("change", () => { refreshSpells(); update(); });
   for (const id of ["heal", "harm", "tip", "alt", "focus", "attack", "self", "compact"]) $(id).addEventListener("change", update);
   document.querySelectorAll('input[name="mode"]').forEach((r) => r.addEventListener("change", update));
   $("copy").dataset.label = "Makro kopieren";
   $("copy").addEventListener("click", () => copyText($("out").value, $("copy")));
+  renderLang();
+  refreshSpells();
   renderFilter();
   renderLibrary();
   update();
